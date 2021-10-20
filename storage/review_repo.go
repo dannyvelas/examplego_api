@@ -14,10 +14,21 @@ func NewReviewRepo(database *Database) *ReviewRepo {
 
 func (reviewRepo *ReviewRepo) GetActive(limit, offset int) ([]models.Review, error) {
 	const query = `
-  SELECT id, user_id, book_id, title_and_author, review_date, amt_stars, description, is_anonymous
+  SELECT
+    reviews.id,
+		reviews.user_id,
+		reviews.book_id,
+		books.title_and_author,
+		reviews.review_date,
+		reviews.amt_stars,
+		reviews.description,
+		reviews.is_anonymous
   FROM reviews
-  WHERE review_date <= EXTRACT(epoch FROM NOW())
-  AND is_anonymous = FALSE
+  LEFT JOIN books ON
+    reviews.book_id = books.book_id 
+  WHERE
+    reviews.review_date <= EXTRACT(epoch FROM NOW())
+    AND reviews.is_anonymous = FALSE
   LIMIT $1
   OFFSET $2
   `
