@@ -11,11 +11,11 @@ import (
 
 func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
 	return func(r chi.Router) {
-		r.Get("/active", GetActiveReviews(reviewRepo))
+		r.Get("/active", GetActive(reviewRepo))
 	}
 }
 
-func GetActiveReviews(reviewRepo storage.ReviewRepo) http.HandlerFunc {
+func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		page := utils.ToUint(r.URL.Query().Get("page"))
 		size := utils.ToUint(r.URL.Query().Get("size"))
