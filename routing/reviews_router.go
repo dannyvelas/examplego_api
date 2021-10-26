@@ -1,12 +1,10 @@
 package routing
 
 import (
-	"fmt"
-	"net/http"
-
 	"github.com/dannyvelas/go-backend/storage"
 	"github.com/dannyvelas/go-backend/utils"
 	"github.com/go-chi/chi/v5"
+	"net/http"
 )
 
 func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
@@ -24,7 +22,6 @@ func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 		activeReviews, err := reviewRepo.GetActive(limit, offset)
 
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
