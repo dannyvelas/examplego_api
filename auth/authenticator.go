@@ -2,7 +2,6 @@ package auth
 
 import (
 	"github.com/dannyvelas/go-backend/config"
-	"github.com/dannyvelas/go-backend/utils"
 	"net/http"
 )
 
