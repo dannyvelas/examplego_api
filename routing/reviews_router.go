@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"github.com/dannyvelas/go-backend/routing/internal"
 	"github.com/dannyvelas/go-backend/storage"
 	"github.com/go-chi/chi/v5"
 	"net/http"
@@ -14,16 +15,16 @@ func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
 
 func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		page := ToUint(r.URL.Query().Get("page"))
-		size := ToUint(r.URL.Query().Get("size"))
-		limit, offset := PagingToLimitOffset(page, size)
+		page := internal.ToUint(r.URL.Query().Get("page"))
+		size := internal.ToUint(r.URL.Query().Get("size"))
+		limit, offset := internal.PagingToLimitOffset(page, size)
 
 		activeReviews, err := reviewRepo.GetActive(limit, offset)
 		if err != nil {
-			HandleInternalError(w, "Error querying reviewRepo: "+err.Error())
+			internal.HandleInternalError(w, "Error querying reviewRepo: "+err.Error())
 			return
 		}
 
-		RespondJson(w, http.StatusOK, activeReviews)
+		internal.RespondJson(w, http.StatusOK, activeReviews)
 	}
 }
