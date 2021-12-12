@@ -5,14 +5,14 @@ import (
 )
 
 type ReviewRepo struct {
-	database *Database
+	database Database
 }
 
-func NewReviewRepo(database *Database) *ReviewRepo {
-	return &ReviewRepo{database: database}
+func NewReviewRepo(database Database) ReviewRepo {
+	return ReviewRepo{database: database}
 }
 
-func (reviewRepo *ReviewRepo) GetActive(limit, offset int) ([]models.Review, error) {
+func (reviewRepo ReviewRepo) GetActive(limit, offset int) ([]models.Review, error) {
 	const query = `
     SELECT
       reviews.id,

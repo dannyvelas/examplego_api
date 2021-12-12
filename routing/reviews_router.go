@@ -17,6 +17,8 @@ func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
 
 func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Info().Msg("Get All Endpoint")
+
 		page := internal.ToUint(r.URL.Query().Get("page"))
 		size := internal.ToUint(r.URL.Query().Get("size"))
 		limit, offset := internal.PagingToLimitOffset(page, size)

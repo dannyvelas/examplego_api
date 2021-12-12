@@ -27,6 +27,7 @@ func main() {
 		log.Fatal().Msgf("Failed to start database: %s", err.Error())
 		return
 	}
+	log.Info().Msg("Connected to Database.")
 
 	adminRepo := storage.NewAdminRepo(database)
 	reviewRepo := storage.NewReviewRepo(database)
@@ -35,10 +36,10 @@ func main() {
 
 	router := chi.NewRouter()
 	router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Post("/login", routing.Login(*authenticator, *adminRepo))
+		apiRouter.Post("/login", routing.Login(authenticator, adminRepo))
 		apiRouter.Route("/admin", func(adminRouter chi.Router) {
-			adminRouter.Use(authenticator.AdminOnly)
-			adminRouter.Route("/reviews", routing.ReviewsRouter(*reviewRepo))
+			//adminRouter.Use(authenticator.AdminOnly)
+			adminRouter.Route("/reviews", routing.ReviewsRouter(reviewRepo))
 		})
 	})
 
