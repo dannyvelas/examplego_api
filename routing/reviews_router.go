@@ -17,13 +17,13 @@ func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
 
 func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Info().Msg("Get All Endpoint")
+		log.Info().Msg("Get Active Endpoint")
 
-		page := internal.ToUint(r.URL.Query().Get("page"))
 		size := internal.ToUint(r.URL.Query().Get("size"))
-		limit, offset := internal.PagingToLimitOffset(page, size)
+		page := internal.ToUint(r.URL.Query().Get("page"))
+		boundedSize, offset := internal.GetBoundedSizeAndOffset(size, page)
 
-		activeReviews, err := reviewRepo.GetActive(limit, offset)
+		activeReviews, err := reviewRepo.GetActive(boundedSize, offset)
 		if err != nil {
 			internal.HandleInternalError(w, "Error querying reviewRepo: "+err.Error())
 			return
@@ -37,11 +37,11 @@ func GetAll(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Info().Msg("Get All Endpoint")
 
-		page := internal.ToUint(r.URL.Query().Get("page"))
 		size := internal.ToUint(r.URL.Query().Get("size"))
-		limit, offset := internal.PagingToLimitOffset(page, size)
+		page := internal.ToUint(r.URL.Query().Get("page"))
+		boundedSize, offset := internal.GetBoundedSizeAndOffset(size, page)
 
-		allReviews, err := reviewRepo.GetAll(limit, offset)
+		allReviews, err := reviewRepo.GetAll(boundedSize, offset)
 		if err != nil {
 			internal.HandleInternalError(w, "Error querying reviewRepo: "+err.Error())
 			return

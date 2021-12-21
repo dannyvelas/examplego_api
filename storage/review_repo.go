@@ -12,7 +12,7 @@ func NewReviewRepo(database Database) ReviewRepo {
 	return ReviewRepo{database: database}
 }
 
-func (reviewRepo ReviewRepo) GetActive(limit, offset int) ([]models.Review, error) {
+func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, error) {
 	const query = `
     SELECT
       reviews.id,
@@ -66,7 +66,7 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset int) ([]models.Review, erro
 	return reviews, nil
 }
 
-func (reviewRepo *ReviewRepo) GetAll(limit, offset int) ([]models.Review, error) {
+func (reviewRepo *ReviewRepo) GetAll(limit, offset uint) ([]models.Review, error) {
 	const query = `
     SELECT
       reviews.id,
