@@ -39,7 +39,7 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
 	}
 	defer rows.Close()
 
-	var reviews []models.Review
+	reviews := []models.Review{}
 	for rows.Next() {
 		var review models.Review
 		err := rows.Scan(
@@ -90,7 +90,7 @@ func (reviewRepo *ReviewRepo) GetAll(limit, offset uint) ([]models.Review, error
 	}
 	defer rows.Close()
 
-	var reviews []models.Review
+	reviews := []models.Review{}
 	for rows.Next() {
 		var review models.Review
 		err := rows.Scan(
