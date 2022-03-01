@@ -1,0 +1,46 @@
+BEGIN;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS admins(
+  id UUID PRIMARY KEY UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  is_privileged BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS users(
+  id UUID PRIMARY KEY UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  is_private BOOLEAN NOT NULL,
+  public_pin CHAR(4) NOT NULL,
+  country_code CHAR(3) NOT NULL,
+  phone VARCHAR(15) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  is_famous BOOLEAN NOT NULL DEFAULT FALSE,
+  amt_followers BIGINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS books(
+  id UUID PRIMARY KEY UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+  isbn VARCHAR(10) UNIQUE NOT NULL,
+  title TEXT NOT NULL,
+  publication_year CHAR(4) NOT NULL,
+  genre VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reviews(
+  id UUID PRIMARY KEY UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+  book_id UUID REFERENCES books(id) ON DELETE CASCADE NOT NULL,
+  review_date DATE NOT NULL,
+  amt_stars SMALLINT NOT NULL,
+  description TEXT NOT NULL,
+  is_anonymous BOOLEAN NOT NULL
+);
+
+COMMIT;
