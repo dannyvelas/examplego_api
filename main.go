@@ -45,7 +45,8 @@ func main() {
 		apiRouter.Post("/login", routing.Login(authenticator, adminRepo))
 		apiRouter.Route("/admin", func(adminRouter chi.Router) {
 			//adminRouter.Use(authenticator.AdminOnly)
-			adminRouter.Route("/reviews", routing.ReviewsRouter(reviewRepo))
+			adminRouter.Route("/hello", routing.AddAdminId{}.HelloRouter())
+			//adminRouter.Route("/reviews", routing.ReviewsRouter(reviewRepo))
 		})
 	})
 
