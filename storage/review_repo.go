@@ -42,6 +42,7 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
 	reviews := []models.Review{}
 	for rows.Next() {
 		var review models.Review
+
 		err := rows.Scan(
 			&review.Id,
 			&review.UserId,
@@ -52,7 +53,6 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
 			&review.Description,
 			&review.IsAnonymous,
 		)
-
 		if err != nil {
 			return nil, err
 		}
