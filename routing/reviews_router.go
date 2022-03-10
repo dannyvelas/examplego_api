@@ -1,8 +1,8 @@
 package routing
 
 import (
-	"github.com/dannyvelas/go-backend/routing/internal"
-	"github.com/dannyvelas/go-backend/storage"
+	"github.com/dannyvelas/examplego_api/routing/internal"
+	"github.com/dannyvelas/examplego_api/storage"
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
 	"net/http"

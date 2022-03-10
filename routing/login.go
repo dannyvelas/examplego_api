@@ -3,9 +3,9 @@ package routing
 import (
 	"encoding/json"
 	"errors"
-	"github.com/dannyvelas/go-backend/auth"
-	"github.com/dannyvelas/go-backend/routing/internal"
-	"github.com/dannyvelas/go-backend/storage"
+	"github.com/dannyvelas/examplego_api/auth"
+	"github.com/dannyvelas/examplego_api/routing/internal"
+	"github.com/dannyvelas/examplego_api/storage"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"

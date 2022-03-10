@@ -1,4 +1,4 @@
-module github.com/dannyvelas/go-backend
+module github.com/dannyvelas/examplego_api
 
 go 1.17
 

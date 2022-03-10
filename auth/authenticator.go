@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/dannyvelas/go-backend/config"
+	"github.com/dannyvelas/examplego_api/config"
 )
 
 type Authenticator struct {

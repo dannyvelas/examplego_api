@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"github.com/dannyvelas/go-backend/models"
+	"github.com/dannyvelas/examplego_api/models"
 )
 
 type ReviewRepo struct {

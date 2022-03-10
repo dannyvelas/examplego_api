@@ -2,7 +2,7 @@ package storage
 
 import (
 	"database/sql"
-	"github.com/dannyvelas/go-backend/models"
+	"github.com/dannyvelas/examplego_api/models"
 )
 
 type AdminRepo struct {

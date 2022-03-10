@@ -2,7 +2,7 @@ package routing
 
 import (
 	"context"
-	"github.com/dannyvelas/go-backend/routing/internal"
+	"github.com/dannyvelas/examplego_api/routing/internal"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )

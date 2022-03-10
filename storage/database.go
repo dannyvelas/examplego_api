@@ -3,7 +3,7 @@ package storage
 import (
 	"database/sql"
 	"fmt"
-	"github.com/dannyvelas/go-backend/config"
+	"github.com/dannyvelas/examplego_api/config"
 	_ "github.com/lib/pq"
 )
 

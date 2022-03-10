@@ -1,7 +1,7 @@
 package routing
 
 import (
-	"github.com/dannyvelas/go-backend/auth"
+	"github.com/dannyvelas/examplego_api/auth"
 )
 
 type RoutingAuthenticator struct {
