@@ -4,4 +4,4 @@ target/
 .queries/
 .scraps/
 .DS_Store
-go-backend
+bin/
