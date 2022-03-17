@@ -38,7 +38,7 @@ func (jwtMiddleware JWTMiddleware) newJWT(id string) (string, error) {
 func (jwtMiddleware JWTMiddleware) parseJWT(tokenString string) (string, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("Not using SigningMethodHMAC!")
+			return nil, errors.New("Not using SigningMethodHMAC")
 		}
 
 		return jwtMiddleware.tokenSecret, nil
@@ -49,9 +49,9 @@ func (jwtMiddleware JWTMiddleware) parseJWT(tokenString string) (string, error) 
 
 	if claims, ok := token.Claims.(*JWTClaims); !ok || !token.Valid {
 		if !ok {
-			return "", errors.New("Failure casting JWTClaims!")
+			return "", errors.New("Failure casting JWTClaims")
 		} else {
-			return "", errors.New("Token not valid!")
+			return "", errors.New("Token not valid")
 		}
 	} else {
 		return claims.Id, nil
@@ -62,14 +62,14 @@ func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
-			log.Debug().Msg("Cookie not found!")
+			log.Debug().Msg("Rejected Authorization: cookie not found")
 			internal.HandleError(w, internal.Unauthorized)
 			return
 		}
 
 		userId, err := jwtMiddleware.parseJWT(cookie.Value)
 		if err != nil {
-			log.Debug().Msg("Error parsing payload: " + err.Error())
+			log.Debug().Msg("Rejected Authorization. Error parsing jwt cookie: " + err.Error())
 			internal.HandleError(w, internal.Unauthorized)
 			return
 		}
