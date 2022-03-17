@@ -3,7 +3,6 @@ package routing
 import (
 	"encoding/json"
 	"errors"
-	"github.com/dannyvelas/examplego_api/auth"
 	"github.com/dannyvelas/examplego_api/routing/internal"
 	"github.com/dannyvelas/examplego_api/storage"
 	"github.com/rs/zerolog/log"
@@ -16,7 +15,7 @@ type credentials struct {
 	Password string
 }
 
-func Login(authenticator auth.Authenticator, adminRepo storage.AdminRepo) http.HandlerFunc {
+func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Msg("Login Endpoint")
 
@@ -44,7 +43,7 @@ func Login(authenticator auth.Authenticator, adminRepo storage.AdminRepo) http.H
 			return
 		}
 
-		token, err := authenticator.NewJWT(admin.Id)
+		token, err := jwtMiddleware.newJWT(admin.Id)
 		if err != nil {
 			internal.HandleInternalError(w, "Error generating JWT: "+err.Error())
 			return

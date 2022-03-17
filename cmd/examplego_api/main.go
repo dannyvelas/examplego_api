@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/dannyvelas/examplego_api/auth"
 	"github.com/dannyvelas/examplego_api/config"
 	"github.com/dannyvelas/examplego_api/routing"
 	"github.com/dannyvelas/examplego_api/storage"
@@ -37,18 +36,15 @@ func main() {
 	adminRepo := storage.NewAdminRepo(database)
 	reviewRepo := storage.NewReviewRepo(database)
 
-	// initialize authenticator
-	authenticator := auth.NewAuthenticator(config.Token())
-
-	// initialize routing authenticator
-	routing_auth := routing.NewAuthenticator(authenticator)
+	// initialize JWTMiddleware
+	jwtMiddleware := routing.NewJWTMiddleware(config.Token())
 
 	// set routes
 	router := chi.NewRouter()
 	router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Post("/login", routing.Login(authenticator, adminRepo))
+		apiRouter.Post("/login", routing.Login(jwtMiddleware, adminRepo))
 		apiRouter.Route("/admin", func(adminRouter chi.Router) {
-			adminRouter.Use(routing_auth.Authorize)
+			adminRouter.Use(jwtMiddleware.Authenticate)
 			adminRouter.Route("/hello", routing.HelloRouter())
 			adminRouter.Route("/reviews", routing.ReviewsRouter(reviewRepo))
 		})

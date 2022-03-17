@@ -15,7 +15,7 @@ func HelloRouter() func(chi.Router) {
 
 func sayHello() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Debug().Msg("Say Hello Endpoint")
+		log.Debug().Msg("Hello Endpoint")
 		ctx := r.Context()
 
 		userId := ctx.Value("id")
