@@ -61,6 +61,8 @@ func (jwtMiddleware JWTMiddleware) parseJWT(tokenString string) (string, error) 
 
 func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Debug().Msg("JWT Middleware")
+
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
 			log.Debug().Msg("Rejected Authorization: cookie not found")
@@ -71,7 +73,7 @@ func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler 
 
 		userId, err := jwtMiddleware.parseJWT(cookie.Value)
 		if err != nil {
-			log.Debug().Msg("Rejected Authorization. Error parsing jwt cookie: " + err.Error())
+			log.Debug().Msg("Rejected Authorization: Error parsing jwt cookie: " + err.Error())
 			err = apierror.Wrap(err, apierror.ErrUnauthorized)
 			internal.RespondError(w, err)
 			return
