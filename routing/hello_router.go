@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"errors"
 	"github.com/dannyvelas/examplego_api/routing/internal"
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
@@ -20,16 +21,18 @@ func sayHello() http.HandlerFunc {
 
 		userId := ctx.Value("id")
 		if userId == nil {
-			internal.HandleInternalError(w, "key id not found in context")
+			err := errors.New("key id not found in context")
+			internal.RespondError(w, err)
 			return
 		}
 
 		userIdString, ok := userId.(string)
 		if !ok {
-			internal.HandleInternalError(w, "key id not string")
+			err := errors.New("key id is not string")
+			internal.RespondError(w, err)
 			return
 		}
 
-		internal.RespondJson(w, http.StatusOK, "hello, "+userIdString)
+		internal.RespondJSON(w, http.StatusOK, "hello, "+userIdString)
 	}
 }

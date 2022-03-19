@@ -3,6 +3,8 @@ package routing
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"github.com/dannyvelas/examplego_api/apierror"
 	"github.com/dannyvelas/examplego_api/routing/internal"
 	"github.com/dannyvelas/examplego_api/storage"
 	"github.com/rs/zerolog/log"
@@ -22,16 +24,20 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 		var creds credentials
 		err := json.NewDecoder(r.Body).Decode(&creds)
 		if err != nil {
-			internal.HandleError(w, internal.BadRequest)
+			err = fmt.Errorf("Error decoding credentials body: %q", err)
+			err = apierror.Wrap(err, apierror.ErrBadRequest)
+			internal.RespondError(w, err)
 			return
 		}
 
 		admin, err := adminRepo.GetOne(creds.Id)
-		if errors.As(err, &storage.NotFoundError{}) {
-			internal.HandleError(w, internal.Unauthorized)
+		if errors.Is(err, apierror.ErrNotFound) {
+			err = apierror.Wrap(err, apierror.ErrUnauthorized)
+			internal.RespondError(w, err)
 			return
 		} else if err != nil {
-			internal.HandleInternalError(w, "Error querying adminRepo: "+err.Error())
+			err = fmt.Errorf("Error in adminRepo.GetOne: %q", err)
+			internal.RespondError(w, err)
 			return
 		}
 
@@ -39,13 +45,15 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 			[]byte(admin.Password),
 			[]byte(creds.Password),
 		); err != nil {
-			internal.HandleError(w, internal.Unauthorized)
+			err = apierror.Wrap(err, apierror.ErrUnauthorized)
+			internal.RespondError(w, err)
 			return
 		}
 
 		token, err := jwtMiddleware.newJWT(admin.Id)
 		if err != nil {
-			internal.HandleInternalError(w, "Error generating JWT: "+err.Error())
+			err = fmt.Errorf("Error generating JWT: %q", err)
+			internal.RespondError(w, err)
 			return
 		}
 
