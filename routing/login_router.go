@@ -25,14 +25,14 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 		err := json.NewDecoder(r.Body).Decode(&creds)
 		if err != nil {
 			err = fmt.Errorf("Error decoding credentials body: %q", err)
-			err = apierror.Wrap(err, apierror.ErrBadRequest)
+			err = apierror.WrapSentinel(err, apierror.ErrBadRequest)
 			internal.RespondError(w, err)
 			return
 		}
 
 		admin, err := adminRepo.GetOne(creds.Id)
 		if errors.Is(err, apierror.ErrNotFound) {
-			err = apierror.Wrap(err, apierror.ErrUnauthorized)
+			err = apierror.WrapSentinel(err, apierror.ErrUnauthorized)
 			internal.RespondError(w, err)
 			return
 		} else if err != nil {
@@ -45,7 +45,7 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 			[]byte(admin.Password),
 			[]byte(creds.Password),
 		); err != nil {
-			err = apierror.Wrap(err, apierror.ErrUnauthorized)
+			err = apierror.WrapSentinel(err, apierror.ErrUnauthorized)
 			internal.RespondError(w, err)
 			return
 		}
