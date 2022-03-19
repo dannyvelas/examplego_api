@@ -3,6 +3,7 @@ package routing
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/dannyvelas/examplego_api/apierror"
 	"github.com/dannyvelas/examplego_api/config"
 	"github.com/dannyvelas/examplego_api/routing/internal"
@@ -65,16 +66,14 @@ func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler 
 
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
-			log.Debug().Msg("Rejected Authorization: cookie not found")
-			err = apierror.WrapSentinel(err, apierror.ErrUnauthorized)
+			err = fmt.Errorf("Rejected Authorization: %v: %w", err, apierror.ErrUnauthorized)
 			internal.RespondError(w, err)
 			return
 		}
 
 		userId, err := jwtMiddleware.parseJWT(cookie.Value)
 		if err != nil {
-			log.Debug().Msg("Rejected Authorization: Error parsing jwt cookie: " + err.Error())
-			err = apierror.WrapSentinel(err, apierror.ErrUnauthorized)
+			err = fmt.Errorf("Rejected Authorization: Error parsing jwt cookie: %v: %w", err, apierror.ErrUnauthorized)
 			internal.RespondError(w, err)
 			return
 		}

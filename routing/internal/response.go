@@ -32,6 +32,7 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 func RespondError(w http.ResponseWriter, err error) {
 	var apiErr apierror.APIError
 	if errors.As(err, &apiErr) {
+		log.Debug().Msg(err.Error())
 		statusCode, msg := apiErr.APIError()
 		RespondJSON(w, statusCode, msg)
 	} else {

@@ -1,7 +1,6 @@
 package apierror
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -27,8 +26,4 @@ func (sentinel sentinel) Error() string {
 
 func (sentinel sentinel) APIError() (int, string) {
 	return sentinel.statusCode, sentinel.message
-}
-
-func WrapSentinel(err error, sentinel sentinel) error {
-	return fmt.Errorf("%v: %w", err, sentinel)
 }
