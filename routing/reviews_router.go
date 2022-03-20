@@ -10,14 +10,14 @@ import (
 	"net/http"
 )
 
-func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
+func ReviewsRouter(reviewsRepo storage.ReviewsRepo) func(chi.Router) {
 	return func(r chi.Router) {
-		r.Get("/active", GetActive(reviewRepo))
-		r.Get("/all", GetAll(reviewRepo))
+		r.Get("/active", GetActive(reviewsRepo))
+		r.Get("/all", GetAll(reviewsRepo))
 	}
 }
 
-func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
+func GetActive(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Msg("Get Active Reviews Endpoint")
 
@@ -25,9 +25,9 @@ func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 		page := internal.ToUint(r.URL.Query().Get("page"))
 		boundedSize, offset := internal.GetBoundedSizeAndOffset(size, page)
 
-		activeReviews, err := reviewRepo.GetActive(boundedSize, offset)
+		activeReviews, err := reviewsRepo.GetActive(boundedSize, offset)
 		if err != nil {
-			err := fmt.Errorf("reviews_router: GetActive: Error querying reviewRepo: %v", err)
+			err := fmt.Errorf("reviews_router: GetActive: Error querying reviewsRepo: %v", err)
 			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}
@@ -36,7 +36,7 @@ func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	}
 }
 
-func GetAll(reviewRepo storage.ReviewRepo) http.HandlerFunc {
+func GetAll(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Msg("Get All Endpoint")
 
@@ -44,9 +44,9 @@ func GetAll(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 		page := internal.ToUint(r.URL.Query().Get("page"))
 		boundedSize, offset := internal.GetBoundedSizeAndOffset(size, page)
 
-		allReviews, err := reviewRepo.GetAll(boundedSize, offset)
+		allReviews, err := reviewsRepo.GetAll(boundedSize, offset)
 		if err != nil {
-			err = fmt.Errorf("reviews_router: GetAll: Error querying reviewRepo: %v", err)
+			err = fmt.Errorf("reviews_router: GetAll: Error querying reviewsRepo: %v", err)
 			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}

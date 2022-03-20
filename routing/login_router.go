@@ -17,7 +17,7 @@ type credentials struct {
 	Password string
 }
 
-func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.HandlerFunc {
+func Login(jwtMiddleware JWTMiddleware, adminsRepo storage.AdminsRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Msg("Login Endpoint")
 
@@ -29,13 +29,13 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 			return
 		}
 
-		admin, err := adminRepo.GetOne(creds.Id)
+		admin, err := adminsRepo.GetOne(creds.Id)
 		if errors.Is(err, apierror.NotFound) {
 			err = fmt.Errorf("login_router: Rejected Auth: %v", err)
 			internal.RespondError(w, err, apierror.Unauthorized)
 			return
 		} else if err != nil {
-			err = fmt.Errorf("login_router: Error querying adminRepo: %v", err)
+			err = fmt.Errorf("login_router: Error querying adminsRepo: %v", err)
 			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}

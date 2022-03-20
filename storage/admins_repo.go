@@ -7,19 +7,19 @@ import (
 	"github.com/dannyvelas/examplego_api/models"
 )
 
-type AdminRepo struct {
+type AdminsRepo struct {
 	database Database
 }
 
-func NewAdminRepo(database Database) AdminRepo {
-	return AdminRepo{database: database}
+func NewAdminsRepo(database Database) AdminsRepo {
+	return AdminsRepo{database: database}
 }
 
-func (adminRepo AdminRepo) GetOne(id string) (models.Admin, error) {
+func (adminsRepo AdminsRepo) GetOne(id string) (models.Admin, error) {
 	const query = `SELECT id, password FROM admins WHERE email = $1`
 
 	var admin models.Admin
-	err := adminRepo.database.driver.QueryRow(query, id).
+	err := adminsRepo.database.driver.QueryRow(query, id).
 		Scan(&admin.Id, &admin.Password)
 	if err == sql.ErrNoRows {
 		return models.Admin{}, fmt.Errorf("admin_repo: GetOne: %w", apierror.NotFound)

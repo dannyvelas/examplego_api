@@ -33,8 +33,8 @@ func main() {
 	log.Info().Msg("Connected to Database.")
 
 	// initialize repos
-	adminRepo := storage.NewAdminRepo(database)
-	reviewRepo := storage.NewReviewRepo(database)
+	adminsRepo := storage.NewAdminsRepo(database)
+	reviewsRepo := storage.NewReviewsRepo(database)
 
 	// initialize JWTMiddleware
 	jwtMiddleware := routing.NewJWTMiddleware(config.Token())
@@ -42,11 +42,11 @@ func main() {
 	// set routes
 	router := chi.NewRouter()
 	router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Post("/login", routing.Login(jwtMiddleware, adminRepo))
+		apiRouter.Post("/login", routing.Login(jwtMiddleware, adminsRepo))
 		apiRouter.Route("/admin", func(adminRouter chi.Router) {
 			adminRouter.Use(jwtMiddleware.Authenticate)
 			adminRouter.Route("/hello", routing.HelloRouter())
-			adminRouter.Route("/reviews", routing.ReviewsRouter(reviewRepo))
+			adminRouter.Route("/reviews", routing.ReviewsRouter(reviewsRepo))
 		})
 	})
 

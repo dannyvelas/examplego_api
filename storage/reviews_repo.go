@@ -5,15 +5,15 @@ import (
 	"github.com/dannyvelas/examplego_api/models"
 )
 
-type ReviewRepo struct {
+type ReviewsRepo struct {
 	database Database
 }
 
-func NewReviewRepo(database Database) ReviewRepo {
-	return ReviewRepo{database: database}
+func NewReviewsRepo(database Database) ReviewsRepo {
+	return ReviewsRepo{database: database}
 }
 
-func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, error) {
+func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, error) {
 	const query = `
     SELECT
       reviews.id,
@@ -34,7 +34,7 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
     OFFSET $2
   `
 
-	rows, err := reviewRepo.database.driver.Query(query, limit, offset)
+	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("review_repo: GetActive: %v", WrapSQLError(ErrDatabaseQuery, err))
 	}
@@ -67,7 +67,7 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
 	return reviews, nil
 }
 
-func (reviewRepo *ReviewRepo) GetAll(limit, offset uint) ([]models.Review, error) {
+func (reviewsRepo *ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, error) {
 	const query = `
     SELECT
       reviews.id,
@@ -85,7 +85,7 @@ func (reviewRepo *ReviewRepo) GetAll(limit, offset uint) ([]models.Review, error
     OFFSET $2
   `
 
-	rows, err := reviewRepo.database.driver.Query(query, limit, offset)
+	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("review_repo: GetAll: %v", WrapSQLError(ErrDatabaseQuery, err))
 	}
