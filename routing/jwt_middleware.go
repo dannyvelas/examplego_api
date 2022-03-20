@@ -67,14 +67,14 @@ func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler 
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
 			err = fmt.Errorf("Rejected Authorization: %v", err)
-			internal.RespondError(w, apierror.Wrap(err, apierror.ErrUnauthorized))
+			internal.RespondError(w, err, apierror.ErrUnauthorized)
 			return
 		}
 
 		userId, err := jwtMiddleware.parseJWT(cookie.Value)
 		if err != nil {
 			err = fmt.Errorf("Rejected Authorization: Error parsing jwt cookie: %v", err)
-			internal.RespondError(w, apierror.Wrap(err, apierror.ErrUnauthorized))
+			internal.RespondError(w, err, apierror.ErrUnauthorized)
 			return
 		}
 

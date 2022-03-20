@@ -23,12 +23,12 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	}
 }
 
-func RespondError(w http.ResponseWriter, err apierror.WrappedSentinel) {
-	statusCode, message := err.APIError()
+func RespondError(w http.ResponseWriter, internalErr error, apiErr apierror.APIError) {
+	statusCode, message := apiErr.APIError()
 	if statusCode == http.StatusInternalServerError {
-		log.Error().Msg(err.Error())
+		log.Error().Msg(internalErr.Error())
 	} else {
-		log.Debug().Msg(err.Error())
+		log.Debug().Msg(internalErr.Error())
 	}
 	RespondJSON(w, statusCode, message)
 }
