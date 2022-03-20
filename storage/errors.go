@@ -19,6 +19,6 @@ func (e sentinelError) Error() string {
 	return e.message
 }
 
-func NewError(sentinelErr sentinelError, err error) error {
+func WrapSQLError(sentinelErr sentinelError, err error) error {
 	return fmt.Errorf("%v: %w", sentinelErr, err)
 }
