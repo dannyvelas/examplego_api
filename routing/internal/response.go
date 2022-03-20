@@ -17,7 +17,7 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Error().Msgf("Error encoding response: %s", err)
 
-		if _, err := io.WriteString(w, apierror.ErrInternalServerError.Error()); err != nil {
+		if _, err := io.WriteString(w, apierror.InternalServerError.Error()); err != nil {
 			log.Error().Msgf("Error sending Internal Server Error response: %q", err)
 		}
 	}

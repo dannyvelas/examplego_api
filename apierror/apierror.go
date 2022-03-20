@@ -14,10 +14,10 @@ type sentinel struct {
 }
 
 var (
-	ErrUnauthorized        = sentinel{http.StatusUnauthorized, "Unauthorized"}
-	ErrBadRequest          = sentinel{http.StatusBadRequest, "Bad Request"}
-	ErrNotFound            = sentinel{http.StatusNotFound, "Not Found"}
-	ErrInternalServerError = sentinel{http.StatusInternalServerError, "Internal Server Error"}
+	Unauthorized        = sentinel{http.StatusUnauthorized, "Unauthorized"}
+	BadRequest          = sentinel{http.StatusBadRequest, "Bad Request"}
+	NotFound            = sentinel{http.StatusNotFound, "Not Found"}
+	InternalServerError = sentinel{http.StatusInternalServerError, "Internal Server Error"}
 )
 
 func (sentinel sentinel) Error() string {

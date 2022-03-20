@@ -25,18 +25,18 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 		err := json.NewDecoder(r.Body).Decode(&creds)
 		if err != nil {
 			err = fmt.Errorf("Error decoding credentials body: %v", err)
-			internal.RespondError(w, err, apierror.ErrBadRequest)
+			internal.RespondError(w, err, apierror.BadRequest)
 			return
 		}
 
 		admin, err := adminRepo.GetOne(creds.Id)
-		if errors.Is(err, apierror.ErrNotFound) {
+		if errors.Is(err, apierror.NotFound) {
 			err = fmt.Errorf("Rejected Authorization: %v", err)
-			internal.RespondError(w, err, apierror.ErrUnauthorized)
+			internal.RespondError(w, err, apierror.Unauthorized)
 			return
 		} else if err != nil {
 			err = fmt.Errorf("Error in adminRepo.GetOne: %v", err)
-			internal.RespondError(w, err, apierror.ErrInternalServerError)
+			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}
 
@@ -45,14 +45,14 @@ func Login(jwtMiddleware JWTMiddleware, adminRepo storage.AdminRepo) http.Handle
 			[]byte(creds.Password),
 		); err != nil {
 			err = fmt.Errorf("Rejected Authorization: %v", err)
-			internal.RespondError(w, err, apierror.ErrUnauthorized)
+			internal.RespondError(w, err, apierror.Unauthorized)
 			return
 		}
 
 		token, err := jwtMiddleware.newJWT(admin.Id)
 		if err != nil {
 			err = fmt.Errorf("Error generating JWT: %v", err)
-			internal.RespondError(w, err, apierror.ErrUnauthorized)
+			internal.RespondError(w, err, apierror.Unauthorized)
 			return
 		}
 

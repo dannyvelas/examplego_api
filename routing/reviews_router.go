@@ -28,7 +28,7 @@ func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 		activeReviews, err := reviewRepo.GetActive(boundedSize, offset)
 		if err != nil {
 			err := fmt.Errorf("Error in adminRepo.GetActive: %v", err)
-			internal.RespondError(w, err, apierror.ErrInternalServerError)
+			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}
 
@@ -47,7 +47,7 @@ func GetAll(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 		allReviews, err := reviewRepo.GetAll(boundedSize, offset)
 		if err != nil {
 			err = fmt.Errorf("Error in adminRepo.GetAll: %v", err)
-			internal.RespondError(w, err, apierror.ErrInternalServerError)
+			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}
 

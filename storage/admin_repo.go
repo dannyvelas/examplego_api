@@ -21,7 +21,7 @@ func (adminRepo AdminRepo) GetOne(id string) (models.Admin, error) {
 	err := adminRepo.database.driver.QueryRow(query, id).
 		Scan(&admin.Id, &admin.Password)
 	if err == sql.ErrNoRows {
-		return models.Admin{}, apierror.ErrNotFound
+		return models.Admin{}, apierror.NotFound
 	} else if err != nil {
 		return models.Admin{}, err
 	}
