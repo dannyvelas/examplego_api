@@ -19,7 +19,7 @@ func ReviewsRouter(reviewRepo storage.ReviewRepo) func(chi.Router) {
 
 func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Debug().Msg("Get Active Endpoint")
+		log.Debug().Msg("Get Active Reviews Endpoint")
 
 		size := internal.ToUint(r.URL.Query().Get("size"))
 		page := internal.ToUint(r.URL.Query().Get("page"))
@@ -27,7 +27,7 @@ func GetActive(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 
 		activeReviews, err := reviewRepo.GetActive(boundedSize, offset)
 		if err != nil {
-			err := fmt.Errorf("Error in adminRepo.GetActive: %v", err)
+			err := fmt.Errorf("reviews_router: GetActive: Error querying reviewRepo: %v", err)
 			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}
@@ -46,7 +46,7 @@ func GetAll(reviewRepo storage.ReviewRepo) http.HandlerFunc {
 
 		allReviews, err := reviewRepo.GetAll(boundedSize, offset)
 		if err != nil {
-			err = fmt.Errorf("Error in adminRepo.GetAll: %v", err)
+			err = fmt.Errorf("reviews_router: GetAll: Error querying reviewRepo: %v", err)
 			internal.RespondError(w, err, apierror.InternalServerError)
 			return
 		}

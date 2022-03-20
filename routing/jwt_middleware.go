@@ -13,17 +13,23 @@ import (
 	"time"
 )
 
+var (
+	ErrNotSigningMethodHMAC = errors.New("jwt: Not using SigningMethodHMAC")
+	ErrCastingJWTClaims     = errors.New("jwt: Failed to cast JWT token to JWTClaims struct")
+	ErrInvalidToken         = errors.New("jwt: Invalid Token")
+)
+
+type JWTClaims struct {
+	Id string `json:"id"`
+	jwt.StandardClaims
+}
+
 type JWTMiddleware struct {
 	tokenSecret []byte
 }
 
 func NewJWTMiddleware(tokenConfig config.TokenConfig) JWTMiddleware {
 	return JWTMiddleware{tokenSecret: []byte(tokenConfig.Secret())}
-}
-
-type JWTClaims struct {
-	Id string `json:"id"`
-	jwt.StandardClaims
 }
 
 func (jwtMiddleware JWTMiddleware) newJWT(id string) (string, error) {
@@ -40,7 +46,7 @@ func (jwtMiddleware JWTMiddleware) newJWT(id string) (string, error) {
 func (jwtMiddleware JWTMiddleware) parseJWT(tokenString string) (string, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("Not using SigningMethodHMAC")
+			return nil, ErrNotSigningMethodHMAC
 		}
 
 		return jwtMiddleware.tokenSecret, nil
@@ -51,9 +57,9 @@ func (jwtMiddleware JWTMiddleware) parseJWT(tokenString string) (string, error) 
 
 	if claims, ok := token.Claims.(*JWTClaims); !ok || !token.Valid {
 		if !ok {
-			return "", errors.New("Failure casting JWTClaims")
+			return "", ErrCastingJWTClaims
 		} else {
-			return "", errors.New("Token not valid")
+			return "", ErrInvalidToken
 		}
 	} else {
 		return claims.Id, nil
@@ -66,14 +72,14 @@ func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler 
 
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
-			err = fmt.Errorf("Rejected Authorization: %v", err)
+			err = fmt.Errorf("jwt_middleware: Rejected Auth: %v", err)
 			internal.RespondError(w, err, apierror.Unauthorized)
 			return
 		}
 
 		userId, err := jwtMiddleware.parseJWT(cookie.Value)
 		if err != nil {
-			err = fmt.Errorf("Rejected Authorization: Error parsing jwt cookie: %v", err)
+			err = fmt.Errorf("jwt_middleware: Rejected Auth: Error parsing jwt cookie: %v", err)
 			internal.RespondError(w, err, apierror.Unauthorized)
 			return
 		}

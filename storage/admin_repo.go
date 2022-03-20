@@ -2,6 +2,7 @@ package storage
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/dannyvelas/examplego_api/apierror"
 	"github.com/dannyvelas/examplego_api/models"
 )
@@ -21,9 +22,9 @@ func (adminRepo AdminRepo) GetOne(id string) (models.Admin, error) {
 	err := adminRepo.database.driver.QueryRow(query, id).
 		Scan(&admin.Id, &admin.Password)
 	if err == sql.ErrNoRows {
-		return models.Admin{}, apierror.NotFound
+		return models.Admin{}, fmt.Errorf("admin_repo: GetOne: %w", apierror.NotFound)
 	} else if err != nil {
-		return models.Admin{}, err
+		return models.Admin{}, fmt.Errorf("admin_repo: GetOne: %v", err)
 	}
 
 	return admin, nil

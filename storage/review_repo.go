@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"github.com/dannyvelas/examplego_api/models"
 )
 
@@ -35,7 +36,7 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
 
 	rows, err := reviewRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("review_repo: GetActive: Error querying database: %v", err)
 	}
 	defer rows.Close()
 
@@ -54,13 +55,13 @@ func (reviewRepo ReviewRepo) GetActive(limit, offset uint) ([]models.Review, err
 			&review.IsAnonymous,
 		)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("review_repo: GetActive: Error scanning row: %v", err)
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("review_repo: GetActive: Error when iterating sql rows: %v", err)
 	}
 
 	return reviews, nil
@@ -86,7 +87,7 @@ func (reviewRepo *ReviewRepo) GetAll(limit, offset uint) ([]models.Review, error
 
 	rows, err := reviewRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("review_repo: GetAll: Error querying database: %v", err)
 	}
 	defer rows.Close()
 
@@ -105,13 +106,13 @@ func (reviewRepo *ReviewRepo) GetAll(limit, offset uint) ([]models.Review, error
 		)
 
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("review_repo: GetAll: Error scanning row: %v", err)
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("review_repo: GetAll: Error when iterating sql rows: %v", err)
 	}
 
 	return reviews, nil
