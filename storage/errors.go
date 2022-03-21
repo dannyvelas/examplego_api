@@ -21,5 +21,5 @@ func (e sentinelError) Error() string {
 }
 
 func WrapSQLError(sentinelErr sentinelError, err error) error {
-	return fmt.Errorf("%v: %w", sentinelErr, err)
+	return fmt.Errorf("%v: %v", sentinelErr, err)
 }
