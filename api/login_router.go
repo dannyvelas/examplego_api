@@ -23,18 +23,18 @@ func Login(jwtMiddleware JWTMiddleware, adminsRepo storage.AdminsRepo) http.Hand
 		err := json.NewDecoder(r.Body).Decode(&creds)
 		if err != nil {
 			err = fmt.Errorf("login_router: Error decoding credentials body: %v", err)
-			RespondError(w, err, ErrBadRequest)
+			respondError(w, err, errBadRequest)
 			return
 		}
 
 		admin, err := adminsRepo.GetOne(creds.Id)
 		if errors.Is(err, storage.ErrNoRows) {
 			err = fmt.Errorf("login_router: Rejected Auth: %v", err)
-			RespondError(w, err, ErrUnauthorized)
+			respondError(w, err, errUnauthorized)
 			return
 		} else if err != nil {
 			err = fmt.Errorf("login_router: Error querying adminsRepo: %v", err)
-			RespondError(w, err, ErrInternalServerError)
+			respondError(w, err, errInternalServerError)
 			return
 		}
 
@@ -43,14 +43,14 @@ func Login(jwtMiddleware JWTMiddleware, adminsRepo storage.AdminsRepo) http.Hand
 			[]byte(creds.Password),
 		); err != nil {
 			err = fmt.Errorf("login_router: Rejected Auth: %v", err)
-			RespondError(w, err, ErrUnauthorized)
+			respondError(w, err, errUnauthorized)
 			return
 		}
 
 		token, err := jwtMiddleware.newJWT(admin.Id)
 		if err != nil {
 			err = fmt.Errorf("login_router: Error generating JWT: %v", err)
-			RespondError(w, err, ErrInternalServerError)
+			respondError(w, err, errInternalServerError)
 			return
 		}
 

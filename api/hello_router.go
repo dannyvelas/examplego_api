@@ -21,17 +21,17 @@ func sayHello() http.HandlerFunc {
 		userId := ctx.Value("id")
 		if userId == nil {
 			err := errors.New("hello_router: key id not found in context")
-			RespondError(w, err, ErrInternalServerError)
+			respondError(w, err, errInternalServerError)
 			return
 		}
 
 		userIdString, ok := userId.(string)
 		if !ok {
 			err := errors.New("hello_router: key id is not string")
-			RespondError(w, err, ErrInternalServerError)
+			respondError(w, err, errInternalServerError)
 			return
 		}
 
-		RespondJSON(w, http.StatusOK, "hello, "+userIdString)
+		respondJSON(w, http.StatusOK, "hello, "+userIdString)
 	}
 }

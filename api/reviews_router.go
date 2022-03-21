@@ -10,45 +10,45 @@ import (
 
 func ReviewsRouter(reviewsRepo storage.ReviewsRepo) func(chi.Router) {
 	return func(r chi.Router) {
-		r.Get("/active", GetActive(reviewsRepo))
-		r.Get("/all", GetAll(reviewsRepo))
+		r.Get("/active", getActive(reviewsRepo))
+		r.Get("/all", getAll(reviewsRepo))
 	}
 }
 
-func GetActive(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
+func getActive(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Msg("Get Active Reviews Endpoint")
 
-		size := ToUint(r.URL.Query().Get("size"))
-		page := ToUint(r.URL.Query().Get("page"))
-		boundedSize, offset := GetBoundedSizeAndOffset(size, page)
+		size := toUint(r.URL.Query().Get("size"))
+		page := toUint(r.URL.Query().Get("page"))
+		boundedSize, offset := getBoundedSizeAndOffset(size, page)
 
 		activeReviews, err := reviewsRepo.GetActive(boundedSize, offset)
 		if err != nil {
 			err := fmt.Errorf("reviews_router: GetActive: Error querying reviewsRepo: %v", err)
-			RespondError(w, err, ErrInternalServerError)
+			respondError(w, err, errInternalServerError)
 			return
 		}
 
-		RespondJSON(w, http.StatusOK, activeReviews)
+		respondJSON(w, http.StatusOK, activeReviews)
 	}
 }
 
-func GetAll(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
+func getAll(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Msg("Get All Endpoint")
 
-		size := ToUint(r.URL.Query().Get("size"))
-		page := ToUint(r.URL.Query().Get("page"))
-		boundedSize, offset := GetBoundedSizeAndOffset(size, page)
+		size := toUint(r.URL.Query().Get("size"))
+		page := toUint(r.URL.Query().Get("page"))
+		boundedSize, offset := getBoundedSizeAndOffset(size, page)
 
 		allReviews, err := reviewsRepo.GetAll(boundedSize, offset)
 		if err != nil {
-			err = fmt.Errorf("reviews_router: GetAll: Error querying reviewsRepo: %v", err)
-			RespondError(w, err, ErrInternalServerError)
+			err = fmt.Errorf("reviews_router: getAll: Error querying reviewsRepo: %v", err)
+			respondError(w, err, errInternalServerError)
 			return
 		}
 
-		RespondJSON(w, http.StatusOK, allReviews)
+		respondJSON(w, http.StatusOK, allReviews)
 	}
 }

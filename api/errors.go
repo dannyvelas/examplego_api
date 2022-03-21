@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-type APIError interface {
-	APIError() (int, string)
+type apiError interface {
+	apiError() (int, string)
 }
 
 type sentinel struct {
@@ -14,16 +14,16 @@ type sentinel struct {
 }
 
 var (
-	ErrUnauthorized        = sentinel{http.StatusUnauthorized, "Unauthorized"}
-	ErrBadRequest          = sentinel{http.StatusBadRequest, "Bad Request"}
-	ErrNotFound            = sentinel{http.StatusNotFound, "Not Found"}
-	ErrInternalServerError = sentinel{http.StatusInternalServerError, "Internal Server Error"}
+	errUnauthorized        = sentinel{http.StatusUnauthorized, "Unauthorized"}
+	errBadRequest          = sentinel{http.StatusBadRequest, "Bad Request"}
+	errNotFound            = sentinel{http.StatusNotFound, "Not Found"}
+	errInternalServerError = sentinel{http.StatusInternalServerError, "Internal Server Error"}
 )
 
 func (sentinel sentinel) Error() string {
 	return sentinel.message
 }
 
-func (sentinel sentinel) APIError() (int, string) {
+func (sentinel sentinel) apiError() (int, string) {
 	return sentinel.statusCode, sentinel.message
 }

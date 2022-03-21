@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
+func respondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(statusCode)
 
@@ -16,18 +16,18 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Error().Msgf("Error encoding response: %s", err)
 
-		if _, err := io.WriteString(w, ErrInternalServerError.Error()); err != nil {
+		if _, err := io.WriteString(w, errInternalServerError.Error()); err != nil {
 			log.Error().Msgf("Error sending Internal Server Error response: %q", err)
 		}
 	}
 }
 
-func RespondError(w http.ResponseWriter, internalErr error, apiErr APIError) {
-	statusCode, message := apiErr.APIError()
+func respondError(w http.ResponseWriter, internalErr error, apiErr apiError) {
+	statusCode, message := apiErr.apiError()
 	if statusCode == http.StatusInternalServerError {
 		log.Error().Msg(internalErr.Error())
 	} else {
 		log.Debug().Msg(internalErr.Error())
 	}
-	RespondJSON(w, statusCode, message)
+	respondJSON(w, statusCode, message)
 }
