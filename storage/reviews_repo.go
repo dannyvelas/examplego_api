@@ -36,7 +36,7 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
 
 	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("review_repo: GetActive: %v", WrapSQLError(ErrDatabaseQuery, err))
+		return nil, fmt.Errorf("review_repo: GetActive: %v", NewError(ErrDatabaseQuery, err))
 	}
 	defer rows.Close()
 
@@ -55,13 +55,13 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
 			&review.IsAnonymous,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("review_repo: GetActive: %v", WrapSQLError(ErrScanningRow, err))
+			return nil, fmt.Errorf("review_repo: GetActive: %v", NewError(ErrScanningRow, err))
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("review_repo: GetActive: %v", WrapSQLError(ErrIterating, err))
+		return nil, fmt.Errorf("review_repo: GetActive: %v", NewError(ErrIterating, err))
 	}
 
 	return reviews, nil
@@ -87,7 +87,7 @@ func (reviewsRepo *ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, err
 
 	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("review_repo: GetAll: %v", WrapSQLError(ErrDatabaseQuery, err))
+		return nil, fmt.Errorf("review_repo: GetAll: %v", NewError(ErrDatabaseQuery, err))
 	}
 	defer rows.Close()
 
@@ -106,13 +106,13 @@ func (reviewsRepo *ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, err
 		)
 
 		if err != nil {
-			return nil, fmt.Errorf("review_repo: GetAll: %v", WrapSQLError(ErrScanningRow, err))
+			return nil, fmt.Errorf("review_repo: GetAll: %v", NewError(ErrScanningRow, err))
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("review_repo: GetAll: %v", WrapSQLError(ErrIterating, err))
+		return nil, fmt.Errorf("review_repo: GetAll: %v", NewError(ErrIterating, err))
 	}
 
 	return reviews, nil
