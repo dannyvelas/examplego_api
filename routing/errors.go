@@ -1,4 +1,4 @@
-package internal
+package routing
 
 import (
 	"net/http"
