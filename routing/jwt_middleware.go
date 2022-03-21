@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/dannyvelas/examplego_api/apierror"
 	"github.com/dannyvelas/examplego_api/config"
 	"github.com/dannyvelas/examplego_api/routing/internal"
 	"github.com/golang-jwt/jwt"
@@ -73,14 +72,14 @@ func (jwtMiddleware JWTMiddleware) Authenticate(next http.Handler) http.Handler 
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
 			err = fmt.Errorf("jwt_middleware: Rejected Auth: %v", err)
-			internal.RespondError(w, err, apierror.Unauthorized)
+			internal.RespondError(w, err, internal.ErrUnauthorized)
 			return
 		}
 
 		userId, err := jwtMiddleware.parseJWT(cookie.Value)
 		if err != nil {
 			err = fmt.Errorf("jwt_middleware: Rejected Auth: Error parsing jwt cookie: %v", err)
-			internal.RespondError(w, err, apierror.Unauthorized)
+			internal.RespondError(w, err, internal.ErrUnauthorized)
 			return
 		}
 

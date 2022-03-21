@@ -2,7 +2,6 @@ package routing
 
 import (
 	"fmt"
-	"github.com/dannyvelas/examplego_api/apierror"
 	"github.com/dannyvelas/examplego_api/routing/internal"
 	"github.com/dannyvelas/examplego_api/storage"
 	"github.com/go-chi/chi/v5"
@@ -28,7 +27,7 @@ func GetActive(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
 		activeReviews, err := reviewsRepo.GetActive(boundedSize, offset)
 		if err != nil {
 			err := fmt.Errorf("reviews_router: GetActive: Error querying reviewsRepo: %v", err)
-			internal.RespondError(w, err, apierror.InternalServerError)
+			internal.RespondError(w, err, internal.ErrInternalServerError)
 			return
 		}
 
@@ -47,7 +46,7 @@ func GetAll(reviewsRepo storage.ReviewsRepo) http.HandlerFunc {
 		allReviews, err := reviewsRepo.GetAll(boundedSize, offset)
 		if err != nil {
 			err = fmt.Errorf("reviews_router: GetAll: Error querying reviewsRepo: %v", err)
-			internal.RespondError(w, err, apierror.InternalServerError)
+			internal.RespondError(w, err, internal.ErrInternalServerError)
 			return
 		}
 

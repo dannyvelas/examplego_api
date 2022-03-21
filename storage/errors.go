@@ -13,6 +13,7 @@ var (
 	ErrScanningRow     = sentinelError{"Error Scanning Row"}
 	ErrIterating       = sentinelError{"Error when iterating sql rows"}
 	ErrQueryScanOneRow = sentinelError{"Error when querying and scanning one row"}
+	ErrNoRows          = sentinelError{"No rows found"}
 )
 
 func (e sentinelError) Error() string {

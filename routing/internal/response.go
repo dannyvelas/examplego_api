@@ -2,7 +2,6 @@ package internal
 
 import (
 	"encoding/json"
-	"github.com/dannyvelas/examplego_api/apierror"
 	"github.com/rs/zerolog/log"
 	"io"
 	"net/http"
@@ -17,13 +16,13 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Error().Msgf("Error encoding response: %s", err)
 
-		if _, err := io.WriteString(w, apierror.InternalServerError.Error()); err != nil {
+		if _, err := io.WriteString(w, ErrInternalServerError.Error()); err != nil {
 			log.Error().Msgf("Error sending Internal Server Error response: %q", err)
 		}
 	}
 }
 
-func RespondError(w http.ResponseWriter, internalErr error, apiErr apierror.APIError) {
+func RespondError(w http.ResponseWriter, internalErr error, apiErr APIError) {
 	statusCode, message := apiErr.APIError()
 	if statusCode == http.StatusInternalServerError {
 		log.Error().Msg(internalErr.Error())
