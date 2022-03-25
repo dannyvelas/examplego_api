@@ -16,12 +16,10 @@ CREATE TABLE IF NOT EXISTS users(
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   is_private BOOLEAN NOT NULL,
-  public_pin CHAR(4) NOT NULL,
-  country_code CHAR(3) NOT NULL,
   phone VARCHAR(15) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  is_famous BOOLEAN NOT NULL DEFAULT FALSE,
+  is_verified BOOLEAN NOT NULL DEFAULT FALSE,
   amt_followers BIGINT NOT NULL DEFAULT 0
 );
 
@@ -39,8 +37,7 @@ CREATE TABLE IF NOT EXISTS reviews(
   book_id UUID REFERENCES books(id) ON DELETE CASCADE NOT NULL,
   review_date DATE NOT NULL,
   amt_stars SMALLINT NOT NULL,
-  description TEXT NOT NULL,
-  is_anonymous BOOLEAN NOT NULL
+  description TEXT NOT NULL
 );
 
 COMMIT;
