@@ -36,7 +36,7 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
 
 	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("review_repo: GetActive: %v", NewError(ErrDatabaseQuery, err))
+		return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrDatabaseQuery, err))
 	}
 	defer rows.Close()
 
@@ -48,26 +48,24 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
 			&review.Id,
 			&review.UserId,
 			&review.BookId,
-			&review.TitleAndAuthor,
 			&review.ReviewDate,
 			&review.AmtStars,
 			&review.Description,
-			&review.IsAnonymous,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("review_repo: GetActive: %v", NewError(ErrScanningRow, err))
+			return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrScanningRow, err))
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("review_repo: GetActive: %v", NewError(ErrIterating, err))
+		return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrIterating, err))
 	}
 
 	return reviews, nil
 }
 
-func (reviewsRepo *ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, error) {
+func (reviewsRepo ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, error) {
 	const query = `
     SELECT
       reviews.id,
@@ -87,7 +85,7 @@ func (reviewsRepo *ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, err
 
 	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("review_repo: GetAll: %v", NewError(ErrDatabaseQuery, err))
+		return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrDatabaseQuery, err))
 	}
 	defer rows.Close()
 
@@ -98,22 +96,35 @@ func (reviewsRepo *ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, err
 			&review.Id,
 			&review.UserId,
 			&review.BookId,
-			&review.TitleAndAuthor,
 			&review.ReviewDate,
 			&review.AmtStars,
 			&review.Description,
-			&review.IsAnonymous,
 		)
 
 		if err != nil {
-			return nil, fmt.Errorf("review_repo: GetAll: %v", NewError(ErrScanningRow, err))
+			return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrScanningRow, err))
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("review_repo: GetAll: %v", NewError(ErrIterating, err))
+		return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrIterating, err))
 	}
 
 	return reviews, nil
+}
+
+func (reviewsRepo ReviewsRepo) deleteAll() (int64, error) {
+	query := "DELETE FROM reviews"
+	res, err := reviewsRepo.database.driver.Exec(query)
+	if err != nil {
+		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", NewError(ErrDatabaseExec, err))
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", NewError(ErrGetRowsAffected, err))
+	}
+
+	return rowsAffected, nil
 }
