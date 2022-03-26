@@ -32,6 +32,10 @@ We don't want packages to expose internal errors because clients can become depe
 
 Are [here](./CONVENTIONS.md).
 
+### To-Dos
+
+Are [here](./TODO.md)
+
 ### Shout Outs
 
 #### Simple Gopher
