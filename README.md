@@ -30,4 +30,17 @@ We don't want packages to expose internal errors because clients can become depe
 
 ### Conventions
 
-Are [here](./CONVENTIONS.md)
+Are [here](./CONVENTIONS.md).
+
+### Shout Outs
+
+#### Simple Gopher
+The biggest and most helpful reference in building this project was this repo I found on Reddit: <https://github.com/doppelganger113/simple_gopher>. I've learned a lot from it.
+
+It uses the same patterns of separation of concern and dependency injection. However, it is a little bit more complex.
+
+Some Differences:
+* My code will have a dependency chain like: `api->repo->database`. Marko's code looks like: `api->service->repo->database`.
+* Each layer in his code is separated by interfaces. I use structs.
+* He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
+* I think he doesn't abstract errors between layers.
