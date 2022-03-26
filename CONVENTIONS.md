@@ -1,5 +1,7 @@
 # Conventions
 
+These aren't hard and fast rules. They are agreed-upon guidelines to remove overhead when writing/sharing code. It would be good to follow them when possible.
+
 ### Go conventions this code follows:
 
 * Try for package names to not have underscores or dashes and have meaningful names unlike "util" or "helpers"
