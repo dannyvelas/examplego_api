@@ -54,3 +54,5 @@ Some Differences:
 * <https://stackoverflow.com/questions/26462043/how-to-disallow-direct-struct-initialization>
 * <https://www.alexedwards.net/blog/organising-database-access>
 * <https://www.alexedwards.net/blog/making-and-using-middleware>
+* <https://go.dev/blog/go1.13-errors>
+* <https://www.joeshaw.org/error-handling-in-go-http-applications/>
