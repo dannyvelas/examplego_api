@@ -89,7 +89,7 @@ Some Differences:
 * He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
 * I think he doesn't abstract errors between layers.
 
-#### Useful Resources Not Already Linked
+### Additional Useful Links
 * Deciding what router to use: <https://benhoyt.com/writings/go-routing/>
 * Whether to use getter/setter and constructor pattern in Golang: <https://stackoverflow.com/questions/26462043/how-to-disallow-direct-struct-initialization>
 * Middleware patterns: <https://www.alexedwards.net/blog/making-and-using-middleware>
