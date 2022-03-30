@@ -58,7 +58,7 @@ Example: I want a routing function to get some reviews from the database. How ca
 
 In `main`, I could initialize an instance of a `Database` and pass or "inject" that into the `reviewsRepo` service. I can then inject the `reviewsRepo` service into `api.reviewsRouter`. Consequently, all the routing functions in `api.reviewsRouter` will have access to `reviewsRepo`, which will have access to the database.
 
-### Error Handling
+### Abstracted Error Handling
 
 I'm very careful and interested in error handling. In my opinion it's a majorly important thing that often gets glossed over or put off. It's very obvious that programs generally get an input A and turn it to output B. But, it's more subtle to realize that they actually also may return a variety of other failure outputs. 
 
