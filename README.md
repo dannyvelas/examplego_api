@@ -4,29 +4,68 @@ I built this repo to show patterns and conventions that I think are nice and hel
 
 The database models this repo uses are totally unimportant. They just exist for testing and demonstration purposes.
 
+## Motivation
+
+As someone who has worked some time as a backend Node.js developer, I've grown to dislike a lot of the abstractions that JS/TS and popular libraries provide.
+
+Don't get me wrong. Abstraction is not a bad thing in and of itself. One of the biggest challenges of programming is to fine-tune the level of abstraction that you want, so that you can worry evenly enough about implementation and business logic.
+
+I'm just personally someone who likes delving deeply into things. And, I'd grown tired of hand-waving away at thinner frameworks lke Express.js or bigger frameworks like TypeGraphQL, alike. I wanted to implement something a little closer to hardware and learn how to structure it too.
+
+I initially started with Rust, because it's definitely a cool and lower level language with support for HTTP applications. And, that was a fun experience. But, I eventually switched to Go because it feels a bit better suited for HTTP applications and because the equivalent libraries I was planning on using were a little bit more mature.
+
+I have the Rust project sitting around somewhere. So I'll probably rewrite it as an even lower level HTTP server using [hyper](https://github.com/hyperium/hyper).
+
+For now though, I Hope you can learn a thing or two from the code here.
+
 ## Some patterns:
+
+### Slimness, Within Reason
+
+I tried to minimize the amount of size of dependencies, within reason. The most important dependency here is the routing library. This required the most thought and research.
+
+Per my motivation, I chose not to use [Gin](https://github.com/gin-gonic/gin) even though it is probably Golang's most famous HTTP routing dependency.
+It seemed like it provided more features than I needed.
+
+I could have gone to the extreme and only used `net/http` for routing, using something like Axel Wagner’s [Shift Path technique](https://blog.merovius.de/2017/06/18/how-not-to-use-an-http-router.html). But, I felt like this was too much boilerplate.
+
+So, I opted for go-chi. This felt like a happy medium. It's routing logic is quite small (claiming ~1000LOC), yet it's still very functional and easy to use. As a bonus, it's perfect for modularity (more on that in the next section) and fast.
 
 ### Separation of concern
 
-The database, api, and config logic are all in distinct packages. This allows for really nice abstraction.
+I tried to separate concerns as much as possible, keeping everything in its own isolated module.
 
-For example, the api package can ask the database package for some data, without knowing at all what it does or uses internally. It won't know what the database query looks like, what database library is being used, or what errors that library might return.
+For example, the database, API, and config logic are all in distinct packages. This means that the `api` package can ask the database package for some data, without knowing at all what it does or uses internally. It won't know what the database query looks like, what database library is being used, or what errors that library might return.
+
+Also, I exposed some routes in the `main` file, like `/api/login` and `/api/admin/reviews`. But I chose to keep domain-specific routes in their own sub-routes. For example `/api/admin/reviews/all` and `/api/admin/reviews/active` are only listed and described in a sub-router which is in `api/reviews_router.go`.
 
 ### Dependency Injection
 
-Problem: Many packages depend on other packages to run.
+As I was writing this, I noticed that I needed some way of making my `Database` accessible to my routers. When I was first learning how to make API endpoints, I realized that an easy way to do this was to just make a globally scoped singleton instance of a `Database`. 
 
-Example: Let's suppose you want your API to return a list of reviews.
+I think this works fine in NodeJS because [JS is not a multithreading language](https://deepu.tech/concurrency-in-modern-languages-js/). So, singletons in NodeJS need not be thread-safe. However in every other language, singletons are probably best to avoid if you don't want to touch [thread synchronization](https://stackoverflow.com/questions/1823286/singleton-in-go).
 
-Well, for that, the `api` package needs a `reviewsRepo` from the `storage` package. The `reviewsRepo` needs a `Database`. A `Database` needs a `Config`.
+Aside from being unsafe, singletons also seem to be an [overused pattern in general](https://gameprogrammingpatterns.com/singleton.html).
 
-The question is, how do we give these packages what they need?
+Steering away from singletons, I came across [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection#:~:text=In%20software%20engineering%2C%20dependency%20injection,object%20is%20called%20a%20service.). This was perfect! I could inject a service that interacts with the database into my routing functions.
 
-Answer: Initialize all the dependencies in the entry point function, `main`. Start with the most basic dependency, a `Config` object. Once you a `Config` object, you can create a `Database`. Once you create a `Database`, you can create a `reviewsRepo`. Once you create a `reviewsRepo`, you can give that `reviewsRepo` to the `api.reviewsRouter`. The `api.reviewsRouter` can then use `reviewsRepo` to get a list of reviews.
+Example: I want a routing function to get some reviews from the database. How can I do this?
+
+In `main`, I could initialize an instance of a `Database` and pass or "inject" that into the `reviewsRepo` service. I can then inject the `reviewsRepo` service into `api.reviewsRouter`. That makes it so that all the routing functions in `api.reviewsRouter` have access to `reviewsRepo`, which has access to the database.
 
 ### Abstracted Error Handling
 
-We don't want packages to expose internal errors because clients can become dependent on those errors. More on this [here](./ERROR-HANDLING.md).
+I'm very careful and interested in error handling. In my opinion it's a majorly important thing that often gets glossed over or put off. It's very obvious that programs generally get an input A and turn it to output B. But, it's more subtle to realize that they actually also may return a variety of other failure outputs. 
+
+The path the program takes to returns B and not any failure output, is often called the happy path. And, the paths that return non-B outputs are called unhappy paths.[^1]
+
+Unhappy paths are more subtle because developers are often thinking about how to get their program to return the right output. So, the happy path is where most of the focus and energy goes. The unhappy paths are often just treated as "throw an exception here. And, if you have time, make sure its error message doesn't expose internal or sensitive information."
+
+However, after some years of using monadic functional types in Scala, Elm, and Rust, I've realized just how many unhappy paths there are. These languages had forced me to use types like `Maybe` and `Result<Left, Right>`, where `None` or `Left` represent unhappy results, and `Just` or `Right` represent happy results. Seeing these types all over my programs made me realize that error handling may be close to half of where development is spent, even though its where only a fraction of focus goes.
+
+So, I tried my best to set up a good convention in handling errors here, taking advantage of Go and it's [very well thought out approach](https://go.dev/blog/error-handling-and-go) to dealing with unhappy paths. I also took advantage of some [neat features](https://go.dev/blog/go1.13-errors) Go has to embed errors.
+
+More on this [here](./ERROR-HANDLING.md).
 
 ### Conventions
 
@@ -44,7 +83,7 @@ The biggest and most helpful reference in building this project was this repo I 
 It uses the same patterns of separation of concern and dependency injection. However, it is a little bit more complex.
 
 Some Differences:
-* My code will have a dependency chain like: `api->repo->database`. Marko's code looks like: `api->service->repo->database`.
+* My code will have a dependency chain like: `api-\>repo-\>database`. Marko's code looks like: `api-\>service-\>repo-\>database`.
 * Each layer in his code is separated by interfaces. I use structs.
 * He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
 * I think he doesn't abstract errors between layers.
@@ -56,3 +95,5 @@ Some Differences:
 * <https://www.alexedwards.net/blog/making-and-using-middleware>
 * <https://go.dev/blog/go1.13-errors>
 * <https://www.joeshaw.org/error-handling-in-go-http-applications/>
+
+[^1]: I like to think that this is like the [Anna Karenina principle in statistics](https://en.wikipedia.org/wiki/Anna_Karenina_principle). A dataset may violate the null hypothesis in various ways, but there's only one way in which all the assumptions are satisfied. Similarly, a program may fail in various ways, but succeed in only one way.
