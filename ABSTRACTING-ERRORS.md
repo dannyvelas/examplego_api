@@ -1,4 +1,4 @@
-# Abstracted Error Handling: Example
+# Abstracting Errors
 
 Today, in the `storage` package, I'm using the `database/sql` package to interact with my database. This library will return an error, if for example there is some connectivity problem, user request problem, or development mistake.
 

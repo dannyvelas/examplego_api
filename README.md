@@ -29,7 +29,9 @@ It seemed like it provided more features than I needed.
 
 I could have gone to the extreme and only used `net/http` for routing, using something like Axel Wagner’s [Shift Path technique](https://blog.merovius.de/2017/06/18/how-not-to-use-an-http-router.html). But, I felt like this was too much boilerplate.
 
-So, I opted for go-chi. This felt like a happy medium. It's routing logic is quite small (claiming ~1000LOC), yet it's still very functional and easy to use. As a bonus, it's perfect for modularity (more on that in the next section) and fast.
+So, I opted for [go-chi](https://github.com/go-chi/chi). This felt like a happy medium. It's routing logic is quite small (claiming ~1000LOC), yet it's still very functional and easy to use. As a bonus, it's perfect for modularity (more on that in the next section) and fast.
+
+I was planning to use [http-router](https://github.com/julienschmidt/httprouter) because I think it's [even faster](https://gist.github.com/pkieltyka/123032f12052520aaccab752bd3e78cc) and similarly light. But I didn't because it [doesn't have support for subrouters](https://github.com/julienschmidt/httprouter/issues/141). So, it's a little bit harder to achieve modularity.
 
 ### Separation of concern
 
@@ -37,7 +39,7 @@ I tried to separate concerns as much as possible, keeping everything in its own 
 
 For example, the database, API, and config logic are all in distinct packages. This means that the `api` package can ask the database package for some data, without knowing at all what it does or uses internally. It won't know what the database query looks like, what database library is being used, or what errors that library might return.
 
-Also, I exposed some routes in the `main` file, like `/api/login` and `/api/admin/reviews`. But I chose to keep domain-specific routes in their own sub-routes. For example `/api/admin/reviews/all` and `/api/admin/reviews/active` are only listed and described in a sub-router which is in `api/reviews_router.go`.
+Also, I exposed some routes in the `main` file, like `/api/login` and `/api/admin/reviews`. But I chose to keep domain-specific routes in their own sub-routes. For example `/api/admin/reviews/all` and `/api/admin/reviews/active` are only listed and defined in a sub-router which is in `api/reviews_router.go`.
 
 ### Dependency Injection
 
@@ -47,13 +49,13 @@ I think this works fine in NodeJS because [JS is not a multithreading language](
 
 Aside from being unsafe, singletons also seem to be an [overused pattern in general](https://gameprogrammingpatterns.com/singleton.html).
 
-Steering away from singletons, I came across [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection#:~:text=In%20software%20engineering%2C%20dependency%20injection,object%20is%20called%20a%20service.). This was perfect! I could inject a service that interacts with the database into my routing functions.
+Steering away from singletons, I came across [dependency injection](https://www.alexedwards.net/blog/organising-database-access). This was perfect! I could inject a service that interacts with the database into my routing functions.
 
 Example: I want a routing function to get some reviews from the database. How can I do this?
 
-In `main`, I could initialize an instance of a `Database` and pass or "inject" that into the `reviewsRepo` service. I can then inject the `reviewsRepo` service into `api.reviewsRouter`. That makes it so that all the routing functions in `api.reviewsRouter` have access to `reviewsRepo`, which has access to the database.
+In `main`, I could initialize an instance of a `Database` and pass or "inject" that into the `reviewsRepo` service. I can then inject the `reviewsRepo` service into `api.reviewsRouter`. Consequently, all the routing functions in `api.reviewsRouter` will have access to `reviewsRepo`, which will have access to the database.
 
-### Abstracted Error Handling
+### Error Handling
 
 I'm very careful and interested in error handling. In my opinion it's a majorly important thing that often gets glossed over or put off. It's very obvious that programs generally get an input A and turn it to output B. But, it's more subtle to realize that they actually also may return a variety of other failure outputs. 
 
@@ -63,9 +65,9 @@ Unhappy paths are more subtle because developers are often thinking about how to
 
 However, after some years of using monadic functional types in Scala, Elm, and Rust, I've realized just how many unhappy paths there are. These languages had forced me to use types like `Maybe` and `Result<Left, Right>`, where `None` or `Left` represent unhappy results, and `Just` or `Right` represent happy results. Seeing these types all over my programs made me realize that error handling may be close to half of where development is spent, even though its where only a fraction of focus goes.
 
-So, I tried my best to set up a good convention in handling errors here, taking advantage of Go and it's [very well thought out approach](https://go.dev/blog/error-handling-and-go) to dealing with unhappy paths. I also took advantage of some [neat features](https://go.dev/blog/go1.13-errors) Go has to embed errors.
+So, I tried my best to set up a good convention in handling errors here, taking advantage of Go's [explicit error handling approach](https://go.dev/blog/error-handling-and-go) and some of its [neat ways](https://go.dev/blog/go1.13-errors) to embed errors.
 
-More on this [here](./ERROR-HANDLING.md).
+Part of this convention is to abstract errors between packages. I go into depth [here](./ABSTRACTING-ERRORS.md).
 
 ### Conventions
 
@@ -88,12 +90,9 @@ Some Differences:
 * He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
 * I think he doesn't abstract errors between layers.
 
-#### Useful links
-* <https://benhoyt.com/writings/go-routing/>
-* <https://stackoverflow.com/questions/26462043/how-to-disallow-direct-struct-initialization>
-* <https://www.alexedwards.net/blog/organising-database-access>
-* <https://www.alexedwards.net/blog/making-and-using-middleware>
-* <https://go.dev/blog/go1.13-errors>
-* <https://www.joeshaw.org/error-handling-in-go-http-applications/>
+#### Useful Resources Not Already Linked
+* Deciding what router to use: <https://benhoyt.com/writings/go-routing/>
+* Whether to use getter/setter and constructor pattern in Golang: <https://stackoverflow.com/questions/26462043/how-to-disallow-direct-struct-initialization>
+* Middleware patterns: <https://www.alexedwards.net/blog/making-and-using-middleware>
 
 [^1]: I like to think that this is like the [Anna Karenina principle in statistics](https://en.wikipedia.org/wiki/Anna_Karenina_principle). A dataset may violate the null hypothesis in various ways, but there's only one way in which all the assumptions are satisfied. Similarly, a program may fail in various ways, but succeed in only one way.
