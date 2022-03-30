@@ -4,11 +4,6 @@ import (
 	"fmt"
 )
 
-type configError interface {
-	Error() string
-	ErrorUsingDefault(interface{}) string
-}
-
 type notFoundError struct {
 	variableName string
 }
