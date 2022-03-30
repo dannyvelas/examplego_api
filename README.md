@@ -4,6 +4,9 @@ I built this repo to show patterns and conventions that I think are nice and hel
 
 The database models this repo uses are totally unimportant. They just exist for testing and demonstration purposes.
 
+**NOTE**: This is WORK IN PROGRESS. I plan to add and fix some endpoints. Here are some of the [TODOs](./TODO.md).
+
+
 ## Motivation
 
 As someone who has worked some time as a backend Node.js developer, I've grown to dislike a lot of the abstractions that JS/TS and popular libraries provide.
@@ -72,10 +75,6 @@ Part of this convention is to abstract errors between packages. I go into depth 
 ### Conventions
 
 Are [here](./CONVENTIONS.md).
-
-### To-Dos
-
-Are [here](./TODO.md)
 
 ### Shout Outs
 
