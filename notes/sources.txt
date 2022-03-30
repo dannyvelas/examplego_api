@@ -1,1 +1,0 @@
-https://www.joeshaw.org/error-handling-in-go-http-applications/

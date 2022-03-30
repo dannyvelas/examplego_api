@@ -19,7 +19,7 @@ I initially started with Rust, because it's definitely a cool and lower level la
 
 I have the Rust project sitting around somewhere. So I'll probably rewrite it as an even lower level HTTP server using [hyper](https://github.com/hyperium/hyper).
 
-For now though, I Hope you can learn a thing or two from the code here.
+For now though, I hope you can learn a thing or two from the code here.
 
 ## Some patterns:
 
@@ -54,7 +54,7 @@ Aside from being unsafe, singletons also seem to be an [overused pattern in gene
 
 Steering away from singletons, I came across [dependency injection](https://www.alexedwards.net/blog/organising-database-access). This was perfect! I could inject a service that interacts with the database into my routing functions.
 
-Example: I want a routing function to get some reviews from the database. How can I do this?
+As an example, suppose I want a routing function to get some reviews from the database. How can I do this?
 
 In `main`, I could initialize an instance of a `Database` and pass or "inject" that into the `reviewsRepo` service. I can then inject the `reviewsRepo` service into `api.reviewsRouter`. Consequently, all the routing functions in `api.reviewsRouter` will have access to `reviewsRepo`, which will have access to the database.
 
