@@ -29,6 +29,10 @@ These aren't hard and fast rules. They are agreed-upon guidelines to remove over
     * Examples: `api/errors.go`, `storage/errors.go`.
 * When returning error messages use this format: "file\_name: function\_name: embedded\_error." Use `%v` and not `%w` per [Abstracted Error Handling](#abstracted-error-handling)
     * Example: `err = fmt.Errorf("login_router: Error decoding credentials body: %v", err)`
+* Sentinel Errors are prefixed with `Err` or `err`:
+    * Examples:
+        * `errUnauthorized = sentinelError{http.StatusUnauthorized, "Unauthorized"}`
+        * `ErrDatabaseQuery = sentinelError{"Error querying database"}`
 
 #### Naming
 
@@ -37,9 +41,11 @@ These aren't hard and fast rules. They are agreed-upon guidelines to remove over
         * `reviews` table
         * `reviewsRepo`, `reviews_repo`, `ReviewsRepo`
         * `reviewsRouter`, `reviews_router`, `ReviewsRouter`
-* Name a variable using lowercase camelCase form of its struct.
+* When possible, name a variable using lowercase camelCase form of its struct. If it's an error, you can name the variable `err` or suffix the variable with `Err`.
     * Example: `adminsRepo := storage.NewAdminsRepo(database)`
-* Name a receiver variable using the lowercase camelCase form of its struct.
+    * Example: `func respondError(w http.ResponseWriter, internalErr error, apiErr apiError) {`
+* When possible, name a receiver variable using the lowercase camelCase form of its struct. If it's an error struct, use `e` instead.
     * Example: `func (reviewsRepo ReviewsRepo) GetActive...`
+    * Example: `func (e sentinelError) Error()...`
 * To avoid confusion between when to use "Repo" and when "Repository" I chose to never use the latter. FZF/Grep the code here and you won't find any case-insensitive instances of the word "repository."
 * Name `.md` files using `TRAIN-CASE`, or my favorite synonym, `SCREAMING-KEBAB-CASE`.
