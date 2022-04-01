@@ -4,27 +4,31 @@ import (
 	"fmt"
 )
 
-type notFoundError struct {
+type NotFoundError struct {
 	variableName string
+	defaultValue any
 }
 
-func (e notFoundError) Error() string {
-	return fmt.Sprintf("No config value found for %s", e.variableName)
+func (e NotFoundError) Error() string {
+	err := fmt.Sprintf("No config value found for %s", e.variableName)
+	return fmt.Sprintf("%s. Using default of: %v", err, e.defaultValue)
 }
 
-func (e notFoundError) ErrorUsingDefault(val interface{}) string {
-	return fmt.Sprintf("%s. Using default of: %v", e, val)
+func newNotFoundError(variableName string, devaultValue any) NotFoundError {
+	return NotFoundError{variableName, devaultValue}
 }
 
-type conversionError struct {
+type ConversionError struct {
 	variableName    string
 	desiredTypeName string
+	defaultValue    any
 }
 
-func (e conversionError) Error() string {
-	return fmt.Sprintf("%s could not be converted to type %s", e.variableName, e.desiredTypeName)
+func (e ConversionError) Error() string {
+	err := fmt.Sprintf("%s could not be converted to type %s", e.variableName, e.desiredTypeName)
+	return fmt.Sprintf("%s. Using default of: %v", err, e.defaultValue)
 }
 
-func (e conversionError) ErrorUsingDefault(val interface{}) string {
-	return fmt.Sprintf("%s. Using default of: %v", e, val)
+func newConversionError(variableName string, desiredTypeName string, defaultValue any) ConversionError {
+	return ConversionError{variableName, desiredTypeName, defaultValue}
 }
