@@ -16,11 +16,12 @@ These aren't hard and fast rules. They are agreed-upon guidelines to remove over
 * Try to prevent nesting packages unless necessary.
 
 #### Git Commits
-* Commit messages are "\<topic\>: \<what-you-did\>". \<topic\> can be a package, a file, or a general concept like "errors".
+* Commit messages are "\<topic\>: \<what-you-did\>". \<topic\> can be a package, a file, or a general concept like "errors". The only exception are commits that concern the entire repository.
     * Examples:
         * `README: added conventions`
         * `models: updated review model`
         * `errors: moved apierror/apierror.go to routing/`
+        * `upgraded to Go 1.18`
     
 
 #### Errors
