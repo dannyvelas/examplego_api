@@ -27,7 +27,7 @@ func main() {
 	// no defer close() because connection closes automatically on program exit
 	database, err := storage.NewDatabase(config.Postgres())
 	if err != nil {
-		log.Fatal().Msgf("Failed to start database: %s", err)
+		log.Fatal().Msgf("Failed to start database: %v", err)
 		return
 	}
 	log.Info().Msg("Connected to Database.")
@@ -75,14 +75,14 @@ func main() {
 	}()
 
 	fatalErr := <-errChannel
-	log.Info().Msgf("Closing server: %s", fatalErr)
+	log.Info().Msgf("Closing server: %v", fatalErr)
 
 	shutdownGracefully(30*time.Second, httpServer)
 }
 
 func StartServer(httpServer http.Server) error {
 	if err := httpServer.ListenAndServe(); err != nil {
-		log.Fatal().Msgf("Failed to start server: %s", err)
+		log.Fatal().Msgf("Failed to start server: %v", err)
 		return err
 	}
 	return nil
@@ -95,7 +95,7 @@ func shutdownGracefully(timeout time.Duration, httpServer http.Server) {
 	defer cancel()
 
 	if err := httpServer.Shutdown(gracefullCtx); err != nil {
-		log.Error().Msgf("Error shutting down the server: %s", err)
+		log.Error().Msgf("Error shutting down the server: %v", err)
 	} else {
 		log.Info().Msg("HttpServer gracefully shut down")
 	}
