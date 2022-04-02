@@ -34,7 +34,8 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
     OFFSET $2
   `
 
-	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
+	boundedLimit := getBoundedLimit(limit)
+	rows, err := reviewsRepo.database.driver.Query(query, boundedLimit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrDatabaseQuery, err))
 	}
@@ -83,7 +84,8 @@ func (reviewsRepo ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, erro
     OFFSET $2
   `
 
-	rows, err := reviewsRepo.database.driver.Query(query, limit, offset)
+	boundedLimit := getBoundedLimit(limit)
+	rows, err := reviewsRepo.database.driver.Query(query, boundedLimit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrDatabaseQuery, err))
 	}
