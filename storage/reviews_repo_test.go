@@ -4,8 +4,6 @@ import (
 	"github.com/dannyvelas/examplego_api/config"
 	"github.com/dannyvelas/examplego_api/models"
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -26,18 +24,9 @@ func (suite *reviewsRepoSuite) SetupSuite() {
 		return
 	}
 
-	driver, err := postgres.WithInstance(database.driver, &postgres.Config{})
+	migrator, err := GetMigrator(database)
 	if err != nil {
-		log.Fatal().Msgf("Failed to cast Database.driver to migrate.Driver interface: %v", err)
-	}
-
-	migrator, err := migrate.NewWithDatabaseInstance("file://../migrations", "postgres", driver)
-	if err != nil {
-		log.Fatal().Msgf("Failed to initialize migrator: %v", err)
-	}
-
-	if err := migrator.Steps(1); err != nil {
-		log.Fatal().Msg(err.Error())
+		log.Fatal().Msgf("Failed to get migrator: %v", err)
 	}
 
 	suite.reviewsRepo = NewReviewsRepo(database)
