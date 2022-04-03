@@ -37,7 +37,7 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
 	boundedLimit := getBoundedLimit(limit)
 	rows, err := reviewsRepo.database.driver.Query(query, boundedLimit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrDatabaseQuery, err))
+		return nil, fmt.Errorf("reviews_repo: GetActive: %v", newError(ErrDatabaseQuery, err))
 	}
 	defer rows.Close()
 
@@ -54,13 +54,13 @@ func (reviewsRepo ReviewsRepo) GetActive(limit, offset uint) ([]models.Review, e
 			&review.Description,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrScanningRow, err))
+			return nil, fmt.Errorf("reviews_repo: GetActive: %v", newError(ErrScanningRow, err))
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("reviews_repo: GetActive: %v", NewError(ErrIterating, err))
+		return nil, fmt.Errorf("reviews_repo: GetActive: %v", newError(ErrIterating, err))
 	}
 
 	return reviews, nil
@@ -87,7 +87,7 @@ func (reviewsRepo ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, erro
 	boundedLimit := getBoundedLimit(limit)
 	rows, err := reviewsRepo.database.driver.Query(query, boundedLimit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrDatabaseQuery, err))
+		return nil, fmt.Errorf("reviews_repo: GetAll: %v", newError(ErrDatabaseQuery, err))
 	}
 	defer rows.Close()
 
@@ -104,13 +104,13 @@ func (reviewsRepo ReviewsRepo) GetAll(limit, offset uint) ([]models.Review, erro
 		)
 
 		if err != nil {
-			return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrScanningRow, err))
+			return nil, fmt.Errorf("reviews_repo: GetAll: %v", newError(ErrScanningRow, err))
 		}
 
 		reviews = append(reviews, review)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("reviews_repo: GetAll: %v", NewError(ErrIterating, err))
+		return nil, fmt.Errorf("reviews_repo: GetAll: %v", newError(ErrIterating, err))
 	}
 
 	return reviews, nil
@@ -120,12 +120,12 @@ func (reviewsRepo ReviewsRepo) deleteAll() (int64, error) {
 	query := "DELETE FROM reviews"
 	res, err := reviewsRepo.database.driver.Exec(query)
 	if err != nil {
-		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", NewError(ErrDatabaseExec, err))
+		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", newError(ErrDatabaseExec, err))
 	}
 
 	rowsAffected, err := res.RowsAffected()
 	if err != nil {
-		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", NewError(ErrGetRowsAffected, err))
+		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", newError(ErrGetRowsAffected, err))
 	}
 
 	return rowsAffected, nil

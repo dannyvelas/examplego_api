@@ -23,7 +23,7 @@ func (adminsRepo AdminsRepo) GetOne(id string) (models.Admin, error) {
 	if err == sql.ErrNoRows {
 		return models.Admin{}, fmt.Errorf("admin_repo: GetOne: %w", ErrNoRows)
 	} else if err != nil {
-		return models.Admin{}, fmt.Errorf("admin_repo: GetOne: %v", NewError(ErrQueryScanOneRow, err))
+		return models.Admin{}, fmt.Errorf("admin_repo: GetOne: %v", newError(ErrQueryScanOneRow, err))
 	}
 
 	return admin, nil
