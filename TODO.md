@@ -3,9 +3,13 @@
 - [x] make all error struct receivers use `e` as the struct name
 - [x] make repo functions check for argument validity and use defaults if not valid
 - [x] find out why `storage/reviews_repo_test.go` is not finding `.env`. fix it
-- [ ] add `SETUP` section to README
+- [x] add testing for review repo
+- [x] add `SETUP` section to README
+- [ ] add testing for admin repo
+- [ ] add testing for review router
+- [ ] add testing for hello router
+- [ ] add testing for login router
 - [ ] send ctx from router to storage
-- [ ] add testing for repos
 - [ ] add testing for routers
 - [ ] integrate goswagger
 - [ ] implement double submit tokens
