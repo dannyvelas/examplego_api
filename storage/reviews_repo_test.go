@@ -12,7 +12,7 @@ import (
 type reviewsRepoSuite struct {
 	suite.Suite
 	reviewsRepo ReviewsRepo
-	migrator    migrate.Migrate
+	migrator    *migrate.Migrate
 }
 
 func (suite *reviewsRepoSuite) SetupSuite() {
