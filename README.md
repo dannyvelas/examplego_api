@@ -1,11 +1,17 @@
 # Example Go API
 
-I built this repo to show patterns and conventions that I think are nice and helpful when building an API. I chose to use Go because it's a sweet, well-thought-out language, that is well-suited for HTTP applications.
+I built this repo to show patterns and conventions that I think are nice and helpful when building an production quality API. I chose to use Go because it's a sweet, well-thought-out language, that is well-suited for HTTP applications.
 
 The database models this repo uses are totally unimportant. They just exist for testing and demonstration purposes.
 
 **NOTE**: This is WORK IN PROGRESS. I plan to add and fix some endpoints. Here are some of the [TODOs](./TODO.md).
 
+## Setup
+
+1. `git clone https://github.com/dannyvelas/examplego_api.git && cd examplego_api`
+2. `cp .env.example .env`
+3. `docker-compose up -d`
+4. `make run`
 
 ## Motivation
 
