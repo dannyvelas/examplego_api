@@ -28,7 +28,7 @@ func (suite *reviewsRepoSuite) SetupSuite() {
 
 	driver, err := postgres.WithInstance(database.driver, &postgres.Config{})
 	if err != nil {
-		log.Fatal().Msgf("Failed to cast database to migrate.Driver() interface: %v", err)
+		log.Fatal().Msgf("Failed to cast Database.driver to migrate.Driver interface: %v", err)
 	}
 
 	migrator, err := migrate.NewWithDatabaseInstance("file://../migrations", "postgres", driver)
@@ -36,7 +36,6 @@ func (suite *reviewsRepoSuite) SetupSuite() {
 		log.Fatal().Msgf("Failed to initialize migrator: %v", err)
 	}
 
-	// go to create schema migration
 	if err := migrator.Steps(1); err != nil {
 		log.Fatal().Msg(err.Error())
 	}
