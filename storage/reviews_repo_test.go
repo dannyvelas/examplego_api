@@ -12,7 +12,7 @@ import (
 type reviewsRepoSuite struct {
 	suite.Suite
 	reviewsRepo ReviewsRepo
-	migrator    *migrate.Migrate
+	migrator    migrate.Migrate
 }
 
 func (suite *reviewsRepoSuite) SetupSuite() {
@@ -33,7 +33,7 @@ func (suite *reviewsRepoSuite) SetupSuite() {
 	suite.migrator = migrator
 }
 
-func (suite *reviewsRepoSuite) TearDownTest() {
+func (suite reviewsRepoSuite) TearDownTest() {
 	suite.reviewsRepo.deleteAll()
 }
 
@@ -41,7 +41,7 @@ func (suite reviewsRepoSuite) TearDownSuite() {
 	suite.migrator.Down()
 }
 
-func (suite *reviewsRepoSuite) TestGetAllReviews_EmptySlice_Positive() {
+func (suite reviewsRepoSuite) TestGetAllReviews_EmptySlice_Positive() {
 	reviews, err := suite.reviewsRepo.GetAll(defaultLimit, defaultOffset)
 	suite.NoError(err, "no error when getting all reviews when the table is empty")
 	suite.Equal(len(reviews), 0, "length of reviews should be 0, since it is empty slice")
