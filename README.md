@@ -4,6 +4,8 @@ I built this repo to show patterns and conventions that I think are nice and hel
 
 The database models this repo uses are totally unimportant. They just exist for testing and demonstration purposes.
 
+I explain why I made this [here](./MOTIVATION.md).
+
 **NOTE**: This is WORK IN PROGRESS. I plan to add and fix some endpoints. Here are some of the [TODOs](./TODO.md).
 
 ## Setup
@@ -13,28 +15,13 @@ The database models this repo uses are totally unimportant. They just exist for 
 3. `docker-compose up -d`
 4. `make run`
 
-## Motivation
-
-As someone who has worked some time as a backend Node.js developer, I've grown to dislike a lot of the abstractions that JS/TS and popular libraries provide.
-
-Don't get me wrong. Abstraction is not a bad thing in and of itself. One of the biggest challenges of programming is to fine-tune the level of abstraction that you want, so that you can worry evenly enough about implementation and business logic.
-
-I'm just personally someone who likes delving deeply into things. And, I'd grown tired of hand-waving away at thinner frameworks lke Express.js or bigger frameworks like TypeGraphQL, alike. I wanted to implement something a little closer to hardware and learn how to structure it too.
-
-I initially started with Rust, because it's definitely a cool and lower level language with support for HTTP applications. And, that was a fun experience. But, I eventually switched to Go because it feels a bit better suited for HTTP applications and because the equivalent libraries I was planning on using were a little bit more mature.
-
-I have the Rust project sitting around somewhere. So I'll probably rewrite it as an even lower level HTTP server using [hyper](https://github.com/hyperium/hyper).
-
-For now though, I hope you can learn a thing or two from the code here.
-
 ## Some patterns:
 
 ### Slimness, Within Reason
 
 I tried to minimize the amount of size of dependencies, within reason. The most important dependency here is the routing library. This required the most thought and research.
 
-Per my motivation, I chose not to use [Gin](https://github.com/gin-gonic/gin) even though it is probably Golang's most famous HTTP routing dependency.
-It seemed like it provided more features than I needed.
+Per my motivation, I chose not to use [Gin](https://github.com/gin-gonic/gin) even though it is probably Golang's most famous HTTP routing dependency. It seemed like it provided more features than I needed.
 
 I could have gone to the extreme and only used `net/http` for routing, using something like Axel Wagner’s [Shift Path technique](https://blog.merovius.de/2017/06/18/how-not-to-use-an-http-router.html). But, I felt like this was too much boilerplate.
 
@@ -93,11 +80,15 @@ Some Differences:
 * My code will have a dependency chain like: `api->repo->database`. Marko's code looks like: `api->service->repo->database`.
 * Each layer in his code is separated by interfaces. I use structs.
 * He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
-* I think he doesn't abstract errors between layers.
+* I think he doesn't abstract errors between packages.
 
 ### Additional Useful Links
 * Deciding what router to use: <https://benhoyt.com/writings/go-routing/>
+* Deciding whether to use a framework or library: <https://stephensearles.com/framework-vs-library/>
 * Whether to use getter/setter and constructor pattern in Golang: <https://stackoverflow.com/questions/26462043/how-to-disallow-direct-struct-initialization>
 * Middleware patterns: <https://www.alexedwards.net/blog/making-and-using-middleware>
+* Testing database: <https://faun.pub/how-to-test-database-repository-in-golang-771b59c8084e>
+* Testify suite: <https://medium.com/nerd-for-tech/testing-rest-api-in-go-with-testify-and-mockery-c31ea2cc88f9>
+* Testing naming conventions: <https://ieftimov.com/posts/testing-in-go-naming-conventions/#:~:text=The%20Golang%20source%20code%20itself,of%20the%20function%20under%20test.>
 
 [^1]: I like to think that this is like the [Anna Karenina principle in statistics](https://en.wikipedia.org/wiki/Anna_Karenina_principle). A dataset may violate the null hypothesis in various ways, but there's only one way in which all the assumptions are satisfied. Similarly, a program may fail in various ways, but succeed in only one way.
