@@ -1,30 +1,20 @@
 # Conventions
 
-These aren't hard and fast rules. They are agreed-upon guidelines to remove overhead when writing/sharing code. It would be good to follow them when possible.
+These aren't hard and fast rules. They are guidelines to remove overhead when writing/sharing code. It would be good to follow them when possible. These are followed in addition to the [Go Conventions Here](https://github.com/golang/go/wiki/CodeReviewComments).
 
-### Go conventions this code follows:
-
-* Try for package names to not have underscores or dashes and have meaningful names unlike "util" or "helpers"
-* File names with more than one word should be separated by underscores
-* Use camelCase for variable names
-* Don't automatically make structs only able to be initialized with constructors (aka regular functions in Go).
-
-### Conventions I Decided:
-
-#### Packages
+## Packages
 * Make everything private by default
 * Try to prevent nesting packages unless necessary.
 
-#### Git Commits
+## Git Commits
 * Commit messages are "\<topic\>: \<what-you-did\>". \<topic\> can be a package, a file, or a general concept like "errors". The only exception are commits that concern the entire repository.
     * Examples:
         * `README: added conventions`
         * `models: updated review model`
         * `errors: moved apierror/apierror.go to routing/`
         * `upgraded to Go 1.18`
-    
 
-#### Errors
+## Errors
 
 * Define all the errors of your package in an `errors.go` file. Here is where you can define your sentinel errors and error constructing functions.
     * Examples: `api/errors.go`, `storage/errors.go`.
@@ -35,7 +25,7 @@ These aren't hard and fast rules. They are agreed-upon guidelines to remove over
         * `errUnauthorized = sentinelError{http.StatusUnauthorized, "Unauthorized"}`
         * `ErrDatabaseQuery = sentinelError{"Error querying database"}`
 
-#### Naming
+## Naming
 
 * Use the plural form for database models. Also use plural form for repos and routers when naming files and variables.
     * Examples:
