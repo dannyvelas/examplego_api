@@ -3,7 +3,11 @@ package config
 import (
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
+	"os"
+	"regexp"
 )
+
+const projectName = "examplego_api"
 
 type Config struct {
 	http     HttpConfig
@@ -11,10 +15,22 @@ type Config struct {
 	token    TokenConfig
 }
 
-func NewConfig() Config {
-	err := godotenv.Load()
+func loadDotEnv() error {
+	cwd, err := os.Getwd()
 	if err != nil {
-		log.Warn().Msg(".env file not found.")
+		return err
+	}
+
+	re := regexp.MustCompile(`^(.*` + projectName + `)`)
+	rootPath := re.Find([]byte(cwd))
+
+	return godotenv.Load(string(rootPath) + `/.env`)
+}
+
+func NewConfig() Config {
+	err := loadDotEnv()
+	if err != nil {
+		log.Warn().Msgf("config: .env file not found: %v", err)
 	}
 
 	return Config{
