@@ -2,6 +2,7 @@
 - [x] update config ErrorUsingDefault error to wrap
 - [x] make all error struct receivers use `e` as the struct name
 - [x] make repo functions check for argument validity and use defaults if not valid
+- [x] find out why `storage/reviews_repo_test.go` is not finding `.env`. fix it
 - [ ] add `SETUP` section to README
 - [ ] send ctx from router to storage
 - [ ] add testing for repos
