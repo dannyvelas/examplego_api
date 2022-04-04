@@ -20,7 +20,7 @@ To do this, TypeGraphQL required many layers of code between my business logic a
 
 This seems fine. But, it still bothered me that there were so many layers. The more layers there are, the more code and API connections between each layer, and thus, the greater risk for 3rd party bugs. These bugs are usually much harder to find than API misuse errors. In such cases, you're basically stuck waiting for the 3rd party to fix it, or trying to find some hacky way to avoid it yourself. This pain might outweigh the benefits of the framework. In my case, the risk of that pain felt like it outweighed the benefit of only needing one type declaration file.
 
-Performance wise, more layers equals more code, which equals more machine instructions, which equals worse performance. If [TS is already much slower compared to Go, layers of TS](https://youtu.be/h7UEwBaGoVo) can't even compete.
+Performance wise, more layers equals more code, which equals more machine instructions, which equals worse performance. If [TS is already much slower compared to Go](https://youtu.be/h7UEwBaGoVo) can't even compete.
 
 ### Alternatives
 Instead of switching to a thinner framework like Express.js, I wanted to implement something even closer to hardware and learn how to structure it too.
