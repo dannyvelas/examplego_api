@@ -16,14 +16,12 @@ import (
 	"time"
 )
 
-const projectName = "examplego_api"
-
 func main() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	log.Info().Msg("Initializing app...")
 
 	// load config
-	config := config.NewConfig(projectName)
+	config := config.NewConfig()
 
 	// connect to database
 	// no defer close() because connection closes automatically on program exit

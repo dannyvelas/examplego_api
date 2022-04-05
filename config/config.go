@@ -13,7 +13,9 @@ type Config struct {
 	token    TokenConfig
 }
 
-func loadDotEnv(projectName string) error {
+const projectName = "examplego_api"
+
+func loadDotEnv() error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -25,8 +27,8 @@ func loadDotEnv(projectName string) error {
 	return godotenv.Load(string(rootPath) + `/.env`)
 }
 
-func NewConfig(projectName string) Config {
-	err := loadDotEnv(projectName)
+func NewConfig() Config {
+	err := loadDotEnv()
 	if err != nil {
 		log.Warn().Msgf("config: .env file not found: %v", err)
 	}
