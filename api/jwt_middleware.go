@@ -42,7 +42,7 @@ func (jwtMiddleware JWTMiddleware) newJWT(id string) (string, error) {
 }
 
 func (jwtMiddleware JWTMiddleware) parseJWT(tokenString string) (string, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &jwtClaims{}, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errNotSigningMethodHMAC
 		}
