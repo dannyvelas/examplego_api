@@ -120,12 +120,12 @@ func (reviewsRepo ReviewsRepo) deleteAll() (int64, error) {
 	query := "DELETE FROM reviews"
 	res, err := reviewsRepo.database.driver.Exec(query)
 	if err != nil {
-		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", newError(ErrDatabaseExec, err))
+		return 0, fmt.Errorf("reviews_repo: deleteAll: %v", newError(ErrDatabaseExec, err))
 	}
 
 	rowsAffected, err := res.RowsAffected()
 	if err != nil {
-		return 0, fmt.Errorf("reviews_repo: DeleteAll: %v", newError(ErrGetRowsAffected, err))
+		return 0, fmt.Errorf("reviews_repo: deleteAll: %v", newError(ErrGetRowsAffected, err))
 	}
 
 	return rowsAffected, nil
