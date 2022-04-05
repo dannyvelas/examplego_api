@@ -7,15 +7,13 @@ import (
 	"regexp"
 )
 
-const projectName = "examplego_api"
-
 type Config struct {
 	http     HttpConfig
 	postgres PostgresConfig
 	token    TokenConfig
 }
 
-func loadDotEnv() error {
+func loadDotEnv(projectName string) error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -27,8 +25,8 @@ func loadDotEnv() error {
 	return godotenv.Load(string(rootPath) + `/.env`)
 }
 
-func NewConfig() Config {
-	err := loadDotEnv()
+func NewConfig(projectName string) Config {
+	err := loadDotEnv(projectName)
 	if err != nil {
 		log.Warn().Msgf("config: .env file not found: %v", err)
 	}
