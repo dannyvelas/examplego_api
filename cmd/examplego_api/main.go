@@ -45,10 +45,10 @@ func main() {
 	router := chi.NewRouter()
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Post("/login", api.Login(jwtMiddleware, adminsRepo))
-		apiRouter.Route("/admin", func(adminRouter chi.Router) {
-			adminRouter.Use(jwtMiddleware.Authenticate)
-			adminRouter.Route("/hello", api.HelloRouter())
-			adminRouter.Route("/reviews", api.ReviewsRouter(reviewsRepo))
+		apiRouter.Route("/admin", func(adminsRouter chi.Router) {
+			adminsRouter.Use(jwtMiddleware.Authenticate)
+			adminsRouter.Route("/hello", api.HelloRouter())
+			adminsRouter.Route("/reviews", api.ReviewsRouter(reviewsRepo))
 		})
 	})
 
