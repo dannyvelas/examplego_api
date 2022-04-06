@@ -32,6 +32,9 @@ These aren't hard and fast rules. They are guidelines to remove overhead when wr
         * `reviews` table
         * `reviewsRepo`, `reviews_repo`, `ReviewsRepo`
         * `reviewsRouter`, `reviews_router`, `ReviewsRouter`
+* Use the singular form for structs in the `models` package.
+    * Examples:
+        * `type Review struct { ... }`
 * Try to avoid abbreviations most of the time.
     * Examples:
         * `defaultValue` not `defaultVal`
