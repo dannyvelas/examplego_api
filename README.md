@@ -83,7 +83,10 @@ Are [here](./CONVENTIONS.md).
 
 ## Shout Outs
 
-### Simple Gopher
+<details>
+
+<summary>Simple Gopher</summary>
+
 The biggest and most helpful reference in building this project was this repo I found on Reddit: <https://github.com/doppelganger113/simple_gopher>. I've learned a lot from it.
 
 It uses the same patterns of separation of concern and dependency injection. However, it is a little bit more complex.
@@ -94,7 +97,8 @@ Some Differences:
 * He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
 * I think he doesn't abstract errors between packages.
 
-### Additional Useful Links
+<summary>Additional Useful Links</summary>
+
 * Deciding what router to use: <https://benhoyt.com/writings/go-routing/>
 * Deciding whether to use a framework or library: <https://stephensearles.com/framework-vs-library/>
 * Whether to use getter/setter and constructor pattern in Golang: <https://stackoverflow.com/questions/26462043/how-to-disallow-direct-struct-initialization>
@@ -102,5 +106,7 @@ Some Differences:
 * Testing database: <https://faun.pub/how-to-test-database-repository-in-golang-771b59c8084e>
 * Testify suite: <https://medium.com/nerd-for-tech/testing-rest-api-in-go-with-testify-and-mockery-c31ea2cc88f9>
 * Testing naming conventions: <https://ieftimov.com/posts/testing-in-go-naming-conventions/#:~:text=The%20Golang%20source%20code%20itself,of%20the%20function%20under%20test.>
+</details>
+
 
 [^1]: I like to think that this is like the [Anna Karenina principle in statistics](https://en.wikipedia.org/wiki/Anna_Karenina_principle). A dataset may violate the null hypothesis in various ways, but there's only one way in which all the assumptions are satisfied. Similarly, a program may fail in various ways, but succeed in only one way.
