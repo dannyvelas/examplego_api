@@ -96,6 +96,9 @@ Some Differences:
 * Each layer in his code is separated by interfaces. I use structs.
 * He has fancy concurrency, CICD, and AWS Cognito Authentication stuff. I don't have these things yet. And, may not add them.
 * I think he doesn't abstract errors between packages.
+</details>
+
+<details>
 
 <summary>Additional Useful Links</summary>
 
