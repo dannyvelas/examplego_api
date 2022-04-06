@@ -17,6 +17,10 @@ I explain why I made this [here](./MOTIVATION.md).
 
 ## Some patterns:
 
+<details>
+
+<summary>Slimness Within Reason</summary>
+
 ### Slimness, Within Reason
 
 I tried to minimize the amount of size of dependencies, within reason. The most important dependency here is the routing library. This required the most thought and research.
@@ -28,6 +32,7 @@ I could have gone to the extreme and only used `net/http` for routing, using som
 So, I opted for [go-chi](https://github.com/go-chi/chi). This felt like a happy medium. It's routing logic is quite small (claiming ~1000LOC), yet it's still very functional and easy to use. As a bonus, it's perfect for modularity (more on that in the next section) and fast.
 
 I was planning to use [http-router](https://github.com/julienschmidt/httprouter) because I think it's [even faster](https://gist.github.com/pkieltyka/123032f12052520aaccab752bd3e78cc) and similarly light. But I didn't because it [doesn't have support for subrouters](https://github.com/julienschmidt/httprouter/issues/141). So, it's a little bit harder to achieve modularity.
+</details>
 
 ### Separation of concern
 
