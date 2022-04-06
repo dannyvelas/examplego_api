@@ -34,13 +34,22 @@ So, I opted for [go-chi](https://github.com/go-chi/chi). This felt like a happy 
 I was planning to use [http-router](https://github.com/julienschmidt/httprouter) because I think it's [even faster](https://gist.github.com/pkieltyka/123032f12052520aaccab752bd3e78cc) and similarly light. But I didn't because it [doesn't have support for subrouters](https://github.com/julienschmidt/httprouter/issues/141). So, it's a little bit harder to achieve modularity.
 </details>
 
-### Separation of concern
+<details>
+
+<summary>Separation of Concern</summary>
+
+### Separation of Concern
 
 I tried to separate concerns as much as possible, keeping everything in its own isolated module.
 
 For example, the database, API, and config logic are all in distinct packages. This means that the `api` package can ask the database package for some data, without knowing at all what it does or uses internally. It won't know what the database query looks like, what database library is being used, or what errors that library might return.
 
 Also, I exposed some routes in the `main` file, like `/api/login` and `/api/admin/reviews`. But I chose to keep domain-specific routes in their own sub-routes. For example `/api/admin/reviews/all` and `/api/admin/reviews/active` are only listed and defined in a sub-router which is in `api/reviews_router.go`.
+</details>
+
+<details>
+
+<summary>Dependency Injection</summary>
 
 ### Dependency Injection
 
@@ -55,6 +64,11 @@ Steering away from singletons, I came across [dependency injection](https://www.
 As an example, suppose I want a routing function to get some reviews from the database. How can I do this?
 
 In `main`, I could initialize an instance of a `Database` and pass or "inject" that into the `reviewsRepo` service. I can then inject the `reviewsRepo` service into `api.reviewsRouter`. Consequently, all the routing functions in `api.reviewsRouter` will have access to `reviewsRepo`, which will have access to the database.
+</details>
+
+<details>
+
+<summary>Abstracted Error Handling</summary>
 
 ### Abstracted Error Handling
 
@@ -68,7 +82,8 @@ However, after some years of using monadic functional types in Scala, Elm, and R
 
 So, I tried my best to set up a good convention in handling errors here, taking advantage of Go's [explicit error handling approach](https://go.dev/blog/error-handling-and-go) and some of its [neat ways](https://go.dev/blog/go1.13-errors) to embed errors.
 
-Part of this convention is to abstract errors between packages. I go into depth [here](./ABSTRACTING-ERRORS.md).
+Part of this convention is to abstract errors between packages. I go into even more depth [here](./ABSTRACTING-ERRORS.md).
+</details>
 
 ### Conventions
 
