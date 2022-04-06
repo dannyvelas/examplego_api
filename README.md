@@ -19,7 +19,7 @@ I explain why I made this [here](./MOTIVATION.md).
 
 <details>
 
-<summary><h3>Slimness Within Reason</h3></summary>
+<summary>Slimness Within Reason</summary>
 
 I tried to minimize the amount of size of dependencies, within reason. The most important dependency here is the routing library. This required the most thought and research.
 
@@ -34,7 +34,7 @@ I was planning to use [http-router](https://github.com/julienschmidt/httprouter)
 
 <details>
 
-<summary><h3>Separation of Concern</h3></summary>
+<summary>Separation of Concern</summary>
 
 I tried to separate concerns as much as possible, keeping everything in its own isolated module.
 
@@ -45,7 +45,7 @@ Also, I exposed some routes in the `main` file, like `/api/login` and `/api/admi
 
 <details>
 
-<summary><h3>Dependency Injection</h3></summary>
+<summary>Dependency Injection</summary>
 
 As I was writing this, I noticed that I needed some way of making my `Database` accessible to my routers. When I was first learning how to make API endpoints, I realized that an easy way to do this was to just make a globally scoped singleton instance of a `Database`. 
 
@@ -62,7 +62,7 @@ In `main`, I could initialize an instance of a `Database` and pass or "inject" t
 
 <details>
 
-<summary><h3>Abstracted Error Handling</h3></summary>
+<summary>Abstracted Error Handling</summary>
 
 I'm very careful and interested in error handling. In my opinion it's a majorly important thing that often gets glossed over or put off. It's very obvious that programs generally get an input A and turn it to output B. But, it's more subtle to realize that they actually also may return a variety of other failure outputs. 
 
@@ -85,7 +85,7 @@ Are [here](./CONVENTIONS.md).
 
 <details>
 
-<summary><h3>Simple Gopher</h3></summary>
+<summary>Simple Gopher</summary>
 
 The biggest and most helpful reference in building this project was this repo I found on Reddit: <https://github.com/doppelganger113/simple_gopher>. I've learned a lot from it.
 
@@ -100,7 +100,7 @@ Some Differences:
 
 <details>
 
-<summary><h3>Additional Useful Links</h3></summary>
+<summary>Additional Useful Links</summary>
 
 * Deciding what router to use: <https://benhoyt.com/writings/go-routing/>
 * Deciding whether to use a framework or library: <https://stephensearles.com/framework-vs-library/>
