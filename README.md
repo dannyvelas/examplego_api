@@ -21,8 +21,6 @@ I explain why I made this [here](./MOTIVATION.md).
 
 <summary>Slimness Within Reason</summary>
 
-### Slimness, Within Reason
-
 I tried to minimize the amount of size of dependencies, within reason. The most important dependency here is the routing library. This required the most thought and research.
 
 Per my motivation, I chose not to use [Gin](https://github.com/gin-gonic/gin) even though it is probably Golang's most famous HTTP routing dependency. It seemed like it provided more features than I needed.
@@ -38,8 +36,6 @@ I was planning to use [http-router](https://github.com/julienschmidt/httprouter)
 
 <summary>Separation of Concern</summary>
 
-### Separation of Concern
-
 I tried to separate concerns as much as possible, keeping everything in its own isolated module.
 
 For example, the database, API, and config logic are all in distinct packages. This means that the `api` package can ask the database package for some data, without knowing at all what it does or uses internally. It won't know what the database query looks like, what database library is being used, or what errors that library might return.
@@ -50,8 +46,6 @@ Also, I exposed some routes in the `main` file, like `/api/login` and `/api/admi
 <details>
 
 <summary>Dependency Injection</summary>
-
-### Dependency Injection
 
 As I was writing this, I noticed that I needed some way of making my `Database` accessible to my routers. When I was first learning how to make API endpoints, I realized that an easy way to do this was to just make a globally scoped singleton instance of a `Database`. 
 
@@ -70,8 +64,6 @@ In `main`, I could initialize an instance of a `Database` and pass or "inject" t
 
 <summary>Abstracted Error Handling</summary>
 
-### Abstracted Error Handling
-
 I'm very careful and interested in error handling. In my opinion it's a majorly important thing that often gets glossed over or put off. It's very obvious that programs generally get an input A and turn it to output B. But, it's more subtle to realize that they actually also may return a variety of other failure outputs. 
 
 The path the program takes to returns B and not any failure output, is often called the happy path. And, the paths that return non-B outputs are called unhappy paths.[^1]
@@ -85,13 +77,13 @@ So, I tried my best to set up a good convention in handling errors here, taking 
 Part of this convention is to abstract errors between packages. I go into even more depth [here](./ABSTRACTING-ERRORS.md).
 </details>
 
-### Conventions
+## Conventions
 
 Are [here](./CONVENTIONS.md).
 
-### Shout Outs
+## Shout Outs
 
-#### Simple Gopher
+### Simple Gopher
 The biggest and most helpful reference in building this project was this repo I found on Reddit: <https://github.com/doppelganger113/simple_gopher>. I've learned a lot from it.
 
 It uses the same patterns of separation of concern and dependency injection. However, it is a little bit more complex.
