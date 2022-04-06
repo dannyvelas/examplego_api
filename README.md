@@ -100,7 +100,7 @@ Some Differences:
 
 <details>
 
-<summary>Additional Useful Links</summary>
+<summary><h3>Additional Useful Links</h3></summary>
 
 * Deciding what router to use: <https://benhoyt.com/writings/go-routing/>
 * Deciding whether to use a framework or library: <https://stephensearles.com/framework-vs-library/>
