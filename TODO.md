@@ -5,7 +5,7 @@
 - [x] find out why `storage/reviews_repo_test.go` is not finding `.env`. fix it
 - [x] add testing for review repo
 - [x] add `SETUP` section to README
-- [ ] add testing for admin repo
+- [x] add testing for admin repo
 - [ ] add testing for review router
 - [ ] add testing for hello router
 - [ ] add testing for login router
